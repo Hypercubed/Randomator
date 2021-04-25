@@ -2,6 +2,12 @@
 
 Randomator is a library for composing generators of random values.  It provides one core type, the `Randomator`, and operators for composing `Randomator`s.
 
+## Install
+
+```
+npm i randomator
+```
+
 ## Intro
 
 A `Randomator` is a, typically random, value generator.  A `Randomator` can be constructed using the `new Randomator` constructor but more often they are constructed using the built-in `Randomator` generators or operators described below.  Every `Randomator` has a `value()` method that returns a single value.
