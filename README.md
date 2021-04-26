@@ -14,24 +14,26 @@ A `Randomator` is a, typically random, value generator.  A `Randomator` can be c
 
 In the most basic example the function `number` returns a Randomator (generator). In this case `value` returns a random number between 0 and 1 (same as `Math.random`).
 
+> Note: in this readme I'll use [Finnish Notation](https://medium.com/@benlesh/observables-and-finnish-notation-df8356ed1c9b) to signify a `Randomator`.  This is simply for clarity.
+
 ```js
-const myNumber = number();
-myNumber.value();  // Returns an random number (same as Math.random())
+const myNumber$ = number();
+myNumber$.value();  // Returns an random number (same as Math.random())
 ```
 
 A more involved example is the `string` function which take several options and returns a `Randomator` of strings:
 
 ```js
-const myString = string({ chars: char('abc'), length: integer({ min: 3, max: 13 }) });
-myString.value();  // returns a string between three (3) and 13 characters (inclusive) of 'a', 'b' or 'c'.
+const myString$ = string({ chars: char('abc'), length: integer({ min: 3, max: 13 }) });
+myString$.value();  // returns a string between three (3) and 13 characters (inclusive) of 'a', 'b' or 'c'.
 ```
 
 Randomators also include methods and operators for creating derived `Randomator`s:
 
 ```js
-const ucaseString = string().map(s => s.toUpperCase());
-const ucaseStringArray = array(ucaseString, 3);
-ucaseString.value();  // returns an array of three uppercase strings.
+const ucaseString$ = string().map(s => s.toUpperCase());
+const ucaseStringArray$ = array(ucaseString, 3);
+ucaseString$.value();  // returns an array of three uppercase strings.
 ```
 
 These derived `Randomator`s are lazy; meaning that no generation takes place until you invoke the `value` method.
@@ -45,7 +47,8 @@ These derived `Randomator`s are lazy; meaning that no generation takes place unt
 Generates a number between 0 and 1 (inclusive of 0, but excluding 1).  This `Randomator` is basically a wrapper around `Math.random`
 
 ```js
-number().value();  // [0, 1) same as `Math.Random`
+const numbers$ = number();
+numbers$.value();  // [0, 1) same as `Math.Random`
 ```
 
 #### `float`
@@ -55,8 +58,8 @@ Generates a number between `min` and `max` rounded to `fixed` decimal places (de
 ```js
 float().value();  // [0, 1) (same as `Math.Random`)
 
-const anotherFloat = float({ min: -1e10, max: 1e10, fixed: 0 });
-anotherFloat.value();  // [-1e10, 1e10)
+const otherFloat$ = float({ min: -1e10, max: 1e10, fixed: 0 });
+otherFloat$.value();  // [-1e10, 1e10)
 ```
 
 #### `integer`
@@ -134,9 +137,9 @@ integer({ min: 0, max: 6 }.map(length => array(string(),length).value();  // ret
 ### `seq`
 
 ```js
-const name = string().map(capitalize);
-const age = integer({ min: 0, max: 12 });
-seq([name, ' is ', age]).value();  // returns a random string like `{string} is {integer}`
+const name$ = string().map(capitalize);
+const age$ = integer({ min: 0, max: 12 });
+seq([name$, ' is ', age$]).value();  // returns a random string like `{string} is {integer}`
 ```
 
 ## `randomator` Tag Function
@@ -144,9 +147,10 @@ seq([name, ' is ', age]).value();  // returns a random string like `{string} is 
 Randomator provides a `randomator` tag function which is essentially a wrapper around the `seq` operator:
 
 ```js
-const name = string().map(capitalize);
-const age = integer({ min: 0, max: 12 });
-randomator`${name} is ${age}`.value();  // same as seq([name, ' is ', age]).value();
+const name$ = string().map(capitalize);
+const age$ = integer({ min: 0, max: 12 });
+const phrases$ = randomator`${name$} is ${age$}`;
+phrases$.value();  // same as seq([name, ' is ', age]).value();
 ```
 
 ## Custom Randomator
@@ -156,8 +160,8 @@ randomator`${name} is ${age}`.value();  // same as seq([name, ' is ', age]).valu
 ### `Randomator#map`
 
 ```js
-const myString = string({ length: integer({ min: 3, max: 13 }) }).map(s => s.toUpperCase());
-myString.value();  // returns a strings between 3 and 13 uppercase characters.
+const myString$ = string({ length: integer({ min: 3, max: 13 }) }).map(s => s.toUpperCase());
+myString$.value();  // returns a strings between 3 and 13 uppercase characters.
 ```
 
 ## License
