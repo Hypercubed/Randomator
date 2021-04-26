@@ -32,7 +32,7 @@ jobs:
 
     - name: Prepare and deploy
       run: |
-        npm run deploy --if-present
+        npm run docs --if-present
       if: ${{ github.ref == 'refs/heads/master' }}
       env:
         CI: true

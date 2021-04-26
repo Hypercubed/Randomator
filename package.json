@@ -30,9 +30,9 @@
     "audit:npm": "npm audit",
     "audit:npm-check": "npm-check --skip-unused || true",
     "npm-update": "npm-check --skip-unused -u",
-    "doc": "run-s doc:*",
-    "doc:html": "typedoc src/index.ts",
-    "doc:publish": "gh-pages -d ./docs"
+    "docs": "run-s docs:*",
+    "docs:html": "typedoc src/index.ts",
+    "docs:publish": "gh-pages -d ./docs"
   },
   "engines": {
     "node": ">=10"
