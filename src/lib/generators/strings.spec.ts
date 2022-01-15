@@ -1,11 +1,11 @@
 import '../setupJest';
 
 import { oneOf } from '../operators/core';
-import { integer } from './random';
-import { char, paragraph, pattern, sentence, string, uuid, word } from './strings';
+import { integers } from './numbers';
+import { chars, paragraphs, pattern, sentences, strings, uuids, words } from './strings';
 
-test('char', () => {
-  const ch = char();
+test('chars', () => {
+  const ch = chars();
   expect(typeof ch.value()).toBe('string');
   expect(ch.value()).toHaveLength(1);
 
@@ -14,38 +14,38 @@ test('char', () => {
     expect(v).toMatch(/^[a-zA-Z0-9!@#$%^&*()]$/);
   });
 
-  const ab = char('ab');
+  const ab = chars('ab');
   expect(ab).forMany(v => {
     expect(v).toMatch(/^[ab]$/);
   });
   expect(ab).toPassFreqTest(['a', 'b']);
 
-  const abc = char('abc');
+  const abc = chars('abc');
   expect(abc).forMany(v => {
     expect(v).toMatch(/^[abc]$/);
   });
   expect(abc).toPassFreqTest(['a', 'b', 'c']);
 });
 
-test('string', () => {
-  const s = string();
+test('strings', () => {
+  const s = strings();
   expect(s).forMany(v => {
     expect(typeof v).toBe('string');
     expect(v).toMatch(/^[a-zA-Z\d!@#$%^&*()]{5,20}$/);
   });
 
-  const ab = string({ chars: char('ab'), length: 2 });
+  const ab = strings({ chars: chars('ab'), length: 2 });
   expect(ab).forMany(v => {
     expect(v).toMatch(/^[ab][ab]$/);
   });
   expect(ab).toPassFreqTest(['aa'], [1 / 4], 3);
 
-  const ss = string({ chars: char('abc'), length: integer({ min: 3, max: 6 }) });
+  const ss = strings({ chars: chars('abc'), length: integers({ min: 3, max: 6 }) });
   expect(ss).forMany(v => {
     expect(v).toMatch(/^[abc]{3,6}$/);
   });
 
-  const sss = integer({ min: 3, max: 6 }).map(length => string({ length, chars: char('abc') }));
+  const sss = integers({ min: 3, max: 6 }).map(length => strings({ length, chars: chars('abc') }));
   expect(sss).forMany(v => {
     expect(v).toMatch(/^[abc]{3,6}$/);
   });
@@ -53,27 +53,27 @@ test('string', () => {
 });
 
 test('word', () => {
-  expect(word()).forMany(v => {
+  expect(words()).forMany(v => {
     expect(typeof v).toBe('string');
     expect(v).toMatch(/^[a-zA-Z][a-z]{0,11}$/);
   });
 
-  const strings = string({ chars: char('abc'), length: integer({ min: 3, max: 5 }) });
+  const strs = strings({ chars: chars('abc'), length: integers({ min: 3, max: 5 }) });
 
-  expect(word({ strings })).forMany(v => {
+  expect(words({ strings: strs })).forMany(v => {
     expect(v).toMatch(/^[a-cA-C][a-c]{2,5}$/);
   });
 });
 
 test('sentence', () => {
-  expect(sentence()).forMany(v => {
+  expect(sentences()).forMany(v => {
     expect(typeof v).toBe('string');
     expect(v).toMatch(/^[A-Z][a-zA-Z ]+[a-zA-Z][.!?]$/);
   });
 });
 
 test('paragraph', () => {
-  expect(paragraph()).forMany(v => {
+  expect(paragraphs()).forMany(v => {
     expect(typeof v).toBe('string');
     // eslint-disable-next-line security/detect-unsafe-regex
     expect(v).toMatch(/^([A-Z][a-zA-Z ]+[a-zA-Z][.!?] ?){3,7}$/);
@@ -101,12 +101,12 @@ test('pattern', () => {
 });
 
 test('uuid', () => {
-  expect(uuid()).forMany(v => {
+  expect(uuids()).forMany(v => {
     expect(typeof v).toBe('string');
     expect(v).toMatch(/^[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/);
   });
 
-  expect(uuid(3)).forMany(v => {
+  expect(uuids(3)).forMany(v => {
     expect(v).toMatch(/^[a-f0-9]{8}-[a-f0-9]{4}-3[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/);
   });
 });

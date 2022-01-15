@@ -1,5 +1,5 @@
 import { MaybeRandomator, Randomator } from '../randomator';
-import { integer, number } from '../generators/random';
+import { integers, numbers } from '../generators/numbers';
 
 /**
  * Generates a random value from within the given array
@@ -8,7 +8,7 @@ import { integer, number } from '../generators/random';
  * @returns
  */
 export function oneOf<T>(arr: MaybeRandomator<T>[]): Randomator<T> {
-  return integer({ max: arr.length - 1 }).map(i => arr[i]);
+  return integers({ max: arr.length - 1 }).map(i => arr[i]);
 }
 
 /**
@@ -20,7 +20,7 @@ export function oneOf<T>(arr: MaybeRandomator<T>[]): Randomator<T> {
  */
 export function weighted<T>(arr: MaybeRandomator<T>[], weights: number[]): Randomator<T> {
   const sum = weights.reduce((acc, v) => acc + v, 0);
-  return number().map(n => {
+  return numbers().map(n => {
     const s = n * sum;
     let t = 0;
     let idx = weights.findIndex(w => s < (t += w));

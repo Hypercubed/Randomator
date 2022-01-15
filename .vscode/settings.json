@@ -3,6 +3,9 @@
     "hexa",
     "lcase",
     "Randomator",
-    "ucase"
+    "Randomators",
+    "strs",
+    "ucase",
+    "wrds"
   ]
 }

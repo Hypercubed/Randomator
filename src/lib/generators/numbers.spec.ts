@@ -1,10 +1,10 @@
 import '../setupJest';
 
-import { boolean, float, integer, number } from './random';
+import { boolean, floats, integers, numbers } from './numbers';
 import { Randomator } from '../randomator';
 
 describe('number', () => {
-  const n = number();
+  const n = numbers();
 
   test('is a Randomator', () => {
     expect(n).toBeInstanceOf(Randomator);
@@ -31,7 +31,7 @@ describe('number', () => {
 
 describe('float', () => {
   test.only('default', () => {
-    const zeroToOne = float();
+    const zeroToOne = floats();
     expect(zeroToOne).toBeInstanceOf(Randomator);
 
     expect(zeroToOne).forMany(v => {
@@ -43,7 +43,7 @@ describe('float', () => {
     expect(zeroToOne.map(x => x < 0.5)).toPassFreqTest([true, false]);
     expect(zeroToOne.map(x => x < 0.25)).toPassFreqTest([true, false], [1 / 4, 3 / 4]);
 
-    const fiveToTen = float({ min: 5, max: 10, fixed: 0 });
+    const fiveToTen = floats({ min: 5, max: 10, fixed: 0 });
     expect(fiveToTen).forMany(v => {
       expect(typeof v).toBe('number');
       expect(v).toBeGreaterThanOrEqual(5);
@@ -53,7 +53,7 @@ describe('float', () => {
   });
 
   test('max', () => {
-    const zeroToTen = float({ max: 10 });
+    const zeroToTen = floats({ max: 10 });
     expect(zeroToTen).forMany(v => {
       expect(typeof v).toBe('number');
       expect(v).toBeGreaterThanOrEqual(0);
@@ -64,7 +64,7 @@ describe('float', () => {
   });
 
   test('large values', () => {
-    const large = float({ max: 1e6, min: -1e6, fixed: 2 });
+    const large = floats({ max: 1e6, min: -1e6, fixed: 2 });
     expect(large).forMany(v => {
       expect(v).toBeGreaterThanOrEqual(-1e6);
       expect(v).toBeLessThan(1e6);
@@ -77,7 +77,7 @@ describe('float', () => {
 });
 
 test('integer', () => {
-  const zeroToNine = integer();
+  const zeroToNine = integers();
   expect(zeroToNine).toBeInstanceOf(Randomator);
 
   expect(zeroToNine).forMany(v => {
@@ -90,7 +90,7 @@ test('integer', () => {
   expect(zeroToNine).toPassFreqTest([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
   expect(zeroToNine).toPassRunsTest();
 
-  const zeroToTen = integer({ max: 10 });
+  const zeroToTen = integers({ max: 10 });
   expect(zeroToTen).forMany(v => {
     expect(v).toBeGreaterThanOrEqual(0);
     expect(v).toBeLessThanOrEqual(10);
@@ -98,7 +98,7 @@ test('integer', () => {
 
   expect(zeroToTen).toPassFreqTest([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
-  const fiveToTen = integer({ max: 10, min: 5 });
+  const fiveToTen = integers({ max: 10, min: 5 });
   expect(fiveToTen).forMany(v => {
     expect(v).toBeGreaterThanOrEqual(5);
     expect(v).toBeLessThanOrEqual(10);

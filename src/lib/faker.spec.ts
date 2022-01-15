@@ -2,7 +2,7 @@
 import './setupJest';
 
 import { randomator, oneOf } from './operators/core';
-import { paragraph, sentence, word } from './generators/strings';
+import { paragraphs, sentences, words } from './generators/strings';
 import { Randomator } from './randomator';
 
 /* Creating a set of "Name" generators similar to faker.name */
@@ -37,13 +37,13 @@ const lorem: Record<string, Randomator<string>> = {};
 lorem.word = oneOf(require('faker/lib/locales/en/lorem/words'));
 
 // generates a space separated list of lorem words
-lorem.words = word({ strings: lorem.word });
+lorem.words = words({ strings: lorem.word });
 
 // a sentence of lorem words including punctuation
-lorem.sentence = sentence({ words: lorem.words });
+lorem.sentence = sentences({ words: lorem.words });
 
 // a paragraph of lorem words
-lorem.paragraph = paragraph({ sentences: lorem.sentence });
+lorem.paragraph = paragraphs({ sentences: lorem.sentence });
 
 test('lorum', () => {
   expect(lorem.word).forMany(v => {

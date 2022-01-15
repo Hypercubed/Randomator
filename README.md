@@ -17,14 +17,14 @@ In the most basic example the function `number` returns a Randomator (generator)
 > Note: in this readme I'll use [Finnish Notation](https://medium.com/@benlesh/observables-and-finnish-notation-df8356ed1c9b) to signify a `Randomator`.  This is simply for clarity.
 
 ```js
-const myNumber$ = number();
+const myNumber$ = numbers();
 myNumber$.value();  // Returns an random number (same as Math.random())
 ```
 
 A more involved example is the `string` function which take several options and returns a `Randomator` of strings:
 
 ```js
-const myString$ = string({ chars: char('abc'), length: integer({ min: 3, max: 13 }) });
+const myString$ = strings({ chars: chars('abc'), length: integers({ min: 3, max: 13 }) });
 myString$.value();  // returns a string between three (3) and 13 characters (inclusive) of 'a', 'b' or 'c'.
 ```
 
@@ -42,66 +42,66 @@ These derived `Randomator`s are lazy; meaning that no generation takes place unt
 
 ### Numbers
 
-#### `number`
+#### `numbers`
 
 Generates a number between 0 and 1 (inclusive of 0, but excluding 1).  This `Randomator` is basically a wrapper around `Math.random`
 
 ```js
-const numbers$ = number();
+const numbers$ = numbers();
 numbers$.value();  // [0, 1) same as `Math.Random`
 ```
 
-#### `float`
+#### `floats`
 
 Generates a number between `min` and `max` rounded to `fixed` decimal places (default: `{ min: 0, max: 1, fixed: 4 }`) inclusive of `min`, but not `max`.
 
 ```js
-float().value();  // [0, 1) (same as `Math.Random`)
+floats().value();  // [0, 1) (same as `Math.Random`)
 
-const otherFloat$ = float({ min: -1e10, max: 1e10, fixed: 0 });
+const otherFloat$ = floats({ min: -1e10, max: 1e10, fixed: 0 });
 otherFloat$.value();  // [-1e10, 1e10)
 ```
 
-#### `integer`
+#### `integers`
 
-Generates a integer between min and max (default: `{ min: 0, max: 10 }`) inclusive of `min`, but not `max`.
+Generates a integer between min and max (default: `{ min: 0, max: 10 }`) inclusive of `min` and `max`.
 
 ```js
-integer().value();  // [0, 10) (aka a single digit)
-integer({ min: 5, max: 12 }).value();  // [5,12)
+integers().value();  // [0, 9] (aka a single digit)
+integers({ min: 5, max: 12 }).value();  // [5,12)
 ```
 
 ### Strings
 
-#### `char`
+#### `chars`
 
 ```js
-char().value();  // returns a random character (one of `abcdefghijklmnopqrstuvwxyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()`).
-char('!@#$').value();  // returns a random character from the set '!@#$'
+chars().value();  // returns a random character (one of `abcdefghijklmnopqrstuvwxyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()`).
+chars('!@#$').value();  // returns a random character from the set '!@#$'
 ```
 
-#### `string`
+#### `strings`
 
 ```js
-string().value();  // returns a random string with between 5 and 20 lowercase characters.
-string({ length: 5 }).value();  // returns a string of five lowercase characters.
-string({ length: integer({ min: 3, max: 13 }) }).value();  // returns a string between 3 and 13 lowercase characters.
+strings().value();  // returns a random string with between 5 and 20 lowercase characters.
+strings({ length: 5 }).value();  // returns a string of five lowercase characters.
+strings({ length: integer({ min: 3, max: 13 }) }).value();  // returns a string between 3 and 13 lowercase characters.
 ```
 
 ### Dates
 
-#### `date`
+#### `dates`
 
 ```js
-date().value();  // returns a date between 20 Apr -271821 and 13 Sep 275760
-date({ min: new Date('1/1/1970'), max: new Date('1/1/2020') }).value();  // returns a string between 1 Jan 1970 and 1 Jan 2020
+dates().value();  // returns a date between 20 Apr -271821 and 13 Sep 275760
+dates({ min: new Date('1/1/1970'), max: new Date('1/1/2020') }).value();  // returns a string between 1 Jan 1970 and 1 Jan 2020
 ```
 
 #### `past`
 
 ```js
-past().value();  // returns a date between 20 Apr -271821 and the moment `value` is invoked
-past({ min: new Date('1/1/1970') }).value();  // returns a string between 1 Jan 1970 and now
+pasts().value();  // returns a date between 20 Apr -271821 and the moment `value` is invoked
+pasts({ min: new Date('1/1/1970') }).value();  // returns a string between 1 Jan 1970 and now
 ```
 
 #### `future`
@@ -124,7 +124,7 @@ oneOf(['yes', 'no', 'maybe']).value(); // returns one random value from input ar
 ### `tuple`
 
 ```js
-tuple([integer(), string()]).value();  // returns an array (equivalant to [integer().value(), string().value()])
+tuple([integer(), string()]).value();  // returns an array (equivalent to [integer().value(), string().value()])
 ```
 
 ### `array`
@@ -147,8 +147,8 @@ seq([name$, ' is ', age$]).value();  // returns a random string like `{string} i
 Randomator provides a `randomator` tag function which is essentially a wrapper around the `seq` operator:
 
 ```js
-const name$ = string().map(capitalize);
-const age$ = integer({ min: 0, max: 12 });
+const name$ = strings().map(capitalize);
+const age$ = integers({ min: 0, max: 12 });
 const phrases$ = randomator`${name$} is ${age$}`;
 phrases$.value();  // same as seq([name, ' is ', age]).value();
 ```
@@ -160,7 +160,7 @@ phrases$.value();  // same as seq([name, ' is ', age]).value();
 ### `Randomator#map`
 
 ```js
-const myString$ = string({ length: integer({ min: 3, max: 13 }) }).map(s => s.toUpperCase());
+const myString$ = strings({ length: integer({ min: 3, max: 13 }) }).map(s => s.toUpperCase());
 myString$.value();  // returns a strings between 3 and 13 uppercase characters.
 ```
 

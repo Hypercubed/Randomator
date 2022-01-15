@@ -8,7 +8,7 @@ const { random, floor } = Math;
  *
  * @returns
  */
-export function number(): Randomator<number> {
+export function numbers(): Randomator<number> {
   return Randomator.from(random);
 }
 
@@ -25,10 +25,10 @@ const DefaultIntegerOptions = { max: 9, min: 0 };
  * @param options
  * @returns
  */
-export function integer(options: Partial<typeof DefaultIntegerOptions> = DefaultIntegerOptions): Randomator<number> {
+export function integers(options: Partial<typeof DefaultIntegerOptions> = DefaultIntegerOptions): Randomator<number> {
   const { max, min } = initOptions(options, DefaultIntegerOptions);
   const d = max - min + 1;
-  return number().map(r => floor(d * r + min));
+  return numbers().map(r => floor(d * r + min));
 }
 
 const FloatDefaults = { max: 1, min: 0, fixed: 4 };
@@ -39,10 +39,10 @@ const FloatDefaults = { max: 1, min: 0, fixed: 4 };
  * @param options
  * @returns
  */
-export function float(options: Partial<typeof FloatDefaults> = FloatDefaults): Randomator<number> {
+export function floats(options: Partial<typeof FloatDefaults> = FloatDefaults): Randomator<number> {
   const { min, max, fixed } = initOptions(options, FloatDefaults);
   const f = Math.pow(10, fixed);
-  return integer({ max: max * f, min: min * f }).map(i => +(i / f).toFixed(fixed));
+  return integers({ max: max * f, min: min * f }).map(i => +(i / f).toFixed(fixed));
 }
 
 /**
@@ -51,5 +51,5 @@ export function float(options: Partial<typeof FloatDefaults> = FloatDefaults): R
  * @returns
  */
 export function boolean(): Randomator<boolean> {
-  return number().map(x => x < 0.5);
+  return numbers().map(x => x < 0.5);
 }

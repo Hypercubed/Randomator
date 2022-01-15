@@ -1,5 +1,5 @@
 import { oneOf, repeat, seq } from '../operators/core';
-import { integer } from './random';
+import { integers } from './numbers';
 import { MaybeRandomator, Randomator } from '../randomator';
 import { capitalize, initOptions } from '../utils';
 
@@ -11,54 +11,52 @@ const CHARS = `${LCASE}${UCASE}${DIGITS}!@#$%^&*()`;
 /**
  * Generates a random character
  *
- * @param chars
+ * @param options
  * @returns
  */
-export function char(chars: string = CHARS): Randomator<string> {
-  return oneOf(chars.split(''));
+export function chars(characters: string = CHARS): Randomator<string> {
+  return oneOf(characters.split(''));
 }
 
-export const lcase = char(LCASE);
-export const ucase = char(UCASE);
-export const hexa = char('0123456789abcdef');
+export const lcase = chars(LCASE);
+export const ucase = chars(UCASE);
+export const hexa = chars('0123456789abcdef');
 
 const DefaultStringOptions = {
-  chars: char() as MaybeRandomator<string>,
-  length: integer({ min: 5, max: 20 }) as MaybeRandomator<number>
+  chars: chars() as MaybeRandomator<string>,
+  length: integers({ min: 5, max: 20 }) as MaybeRandomator<number>
 };
 
 /**
  * Generates a random string
  *
- * @param chars
- * @param len
+ * @param options
  * @returns
  */
-export function string(options: Partial<typeof DefaultStringOptions> = DefaultStringOptions): Randomator<string> {
-  const { chars, length } = initOptions(options, DefaultStringOptions);
-  return Randomator.from(length).map((l: number) => repeat(chars, l));
+export function strings(options: Partial<typeof DefaultStringOptions> = DefaultStringOptions): Randomator<string> {
+  const { chars: _chars, length } = initOptions(options, DefaultStringOptions);
+  return Randomator.from(length).map((l: number) => repeat(_chars, l));
 }
 
 const DefaultWordOptions = {
-  strings: string({ chars: char(LCASE), length: integer({ min: 1, max: 12 }) })
+  strings: strings({ chars: chars(LCASE), length: integers({ min: 1, max: 12 }) })
 };
 
 /**
  * Generates a random word
  *
- * @param strings
- * @param len
+ * @param options
  * @returns
  */
-export function word(options: Partial<typeof DefaultWordOptions> = DefaultWordOptions): Randomator<string> {
-  const { strings } = initOptions(options, DefaultWordOptions);
-  return oneOf([strings, strings.map(capitalize)]);
+export function words(options: Partial<typeof DefaultWordOptions> = DefaultWordOptions): Randomator<string> {
+  const { strings: _strings } = initOptions(options, DefaultWordOptions);
+  return oneOf([_strings, _strings.map(capitalize)]);
 }
 
 const DefaultSentenceOptions = {
-  words: word(),
-  length: integer({ min: 12, max: 18 }),
-  punctuation: char('!?.')
+  words: words(),
+  length: integers({ min: 12, max: 18 }),
+  punctuation: chars('!?.')
 };
 
 /**
@@ -67,15 +65,17 @@ const DefaultSentenceOptions = {
  * @param options
  * @returns
  */
-export function sentence(options: Partial<typeof DefaultSentenceOptions> = DefaultSentenceOptions): Randomator<string> {
-  const { words, length, punctuation } = initOptions(options, DefaultSentenceOptions);
-  const w = Randomator.from(length).map((l: number) => repeat(words, l, { separator: ' ' }));
+export function sentences(
+  options: Partial<typeof DefaultSentenceOptions> = DefaultSentenceOptions
+): Randomator<string> {
+  const { words: _words, length, punctuation } = initOptions(options, DefaultSentenceOptions);
+  const w = Randomator.from(length).map((l: number) => repeat(_words, l, { separator: ' ' }));
   return seq([w.map(capitalize), punctuation]);
 }
 
 const DefaultParagraphOptions = {
-  sentences: sentence(),
-  length: integer({ min: 3, max: 7 }) as MaybeRandomator<number>
+  sentences: sentences(),
+  length: integers({ min: 3, max: 7 }) as MaybeRandomator<number>
 };
 
 /**
@@ -84,11 +84,11 @@ const DefaultParagraphOptions = {
  * @param options
  * @returns
  */
-export function paragraph(
+export function paragraphs(
   options: Partial<typeof DefaultParagraphOptions> = DefaultParagraphOptions
 ): Randomator<string> {
-  const { sentences, length } = initOptions(options, DefaultParagraphOptions);
-  return Randomator.from(length).map((l: number) => repeat(sentences, l, { separator: ' ' }));
+  const { sentences: _sentences, length } = initOptions(options, DefaultParagraphOptions);
+  return Randomator.from(length).map((l: number) => repeat(_sentences, l, { separator: ' ' }));
 }
 
 /**
@@ -109,14 +109,14 @@ const MAP = {
   _: lcase,
   a: lcase,
   x: hexa,
-  y: char('89ab'),
+  y: chars('89ab'),
   '^': ucase,
   A: ucase,
-  '0': integer(),
-  '#': integer(),
-  '!': integer({ max: 9, min: 1 }),
-  '?': char(LCASE + UCASE),
-  '*': char(LCASE + UCASE + DIGITS)
+  '0': integers(),
+  '#': integers(),
+  '!': integers({ max: 9, min: 1 }),
+  '?': chars(LCASE + UCASE),
+  '*': chars(LCASE + UCASE + DIGITS)
 };
 
 /**
@@ -125,6 +125,6 @@ const MAP = {
  * @param version
  * @returns
  */
-export function uuid(version: MaybeRandomator<number> = integer({ min: 1, max: 5 })): Randomator<string> {
+export function uuids(version: MaybeRandomator<number> = integers({ min: 1, max: 5 })): Randomator<string> {
   return Randomator.from(version).map(v => pattern(`xxxxxxxx-xxxx-${v}xxx-yxxx-xxxxxxxxxxxx`));
 }

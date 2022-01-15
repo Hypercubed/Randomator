@@ -1,15 +1,15 @@
 import '../setupJest';
 
-import { date, future, past } from './dates';
+import { dates, future, past } from './dates';
 
 test('date', () => {
-  expect(date()).forMany(v => {
+  expect(dates()).forMany(v => {
     expect(v).toBeInstanceOf(Date);
     expect(+v).toBeGreaterThanOrEqual(-8640000000000000);
     expect(+v).toBeLessThan(8640000000000000);
   });
 
-  const dd = date({ min: new Date('1/1/1990'), max: new Date('1/2/1990') });
+  const dd = dates({ min: new Date('1/1/1990'), max: new Date('1/2/1990') });
   expect(dd).forMany(v => {
     expect(+v).toBeGreaterThanOrEqual(+new Date('1/1/1990'));
     expect(+v).toBeLessThan(+new Date('1/2/1990'));

@@ -1,8 +1,8 @@
 import '../setupJest';
 
-import { integer } from '../generators/random';
+import { integers } from '../generators/numbers';
 import { oneOf, randomator, repeat, seq, record, object, array, weighted, shuffle, unique } from './core';
-import { string } from '../generators/strings';
+import { strings } from '../generators/strings';
 
 test('oneOf', () => {
   const ab = oneOf(['a', 'b']);
@@ -40,7 +40,7 @@ test('oneOf', () => {
   });
   expect(i).toPassFreqTest(['a', 'b', 1, 2], [1 / 3, 1 / 3, 1 / 6, 1 / 6]);
 
-  const ii = oneOf(['a', 'b', repeat(integer(), 5)]);
+  const ii = oneOf(['a', 'b', repeat(integers(), 5)]);
   expect(ii).forMany(v => {
     expect('' + v).toMatch(/^[ab]|\d{5}$/);
   });
@@ -94,7 +94,7 @@ test('shuffle', () => {
     // expect(chiSquaredPValue(arr, ['a', 'b', 'c'], [1 / 3, 1 / 3, 1 / 3], 2)).toBeGreaterThan(0.1);
   });
 
-  const n = shuffle<unknown>(['a', 'b', integer()]);
+  const n = shuffle<unknown>(['a', 'b', integers()]);
   expect(n).forMany((arr: unknown[]) => {
     expect(arr).toHaveLength(3);
     arr.forEach(v => {
@@ -124,7 +124,7 @@ test('unique', () => {
 });
 
 test('array', () => {
-  expect(array(integer(), 5)).forMany((arr: unknown[]) => {
+  expect(array(integers(), 5)).forMany((arr: unknown[]) => {
     expect(arr).toBeInstanceOf(Array);
     arr.forEach(v => {
       expect(typeof v).toBe('number');
@@ -139,18 +139,18 @@ test('array', () => {
 });
 
 test('repeat', () => {
-  const r = repeat(integer(), 5);
+  const r = repeat(integers(), 5);
   expect(r).forMany(v => {
     expect(typeof v).toBe('string');
     expect(v).toMatch(/^\d{5}$/);
   });
 
-  const aaa = integer({ min: 3, max: 5 }).map(l => repeat('a', l));
+  const aaa = integers({ min: 3, max: 5 }).map(l => repeat('a', l));
   expect(aaa).forMany(v => {
     expect(v).toMatch(/^a{3,5}$/);
   });
 
-  const rrr = integer({ min: 3, max: 5 }).map(l => repeat(integer({ min: 1, max: 3 }), l));
+  const rrr = integers({ min: 3, max: 5 }).map(l => repeat(integers({ min: 1, max: 3 }), l));
   expect(rrr).forMany(v => {
     expect(v).toMatch(/^[123]{3,5}$/);
   });
@@ -175,12 +175,12 @@ test('seq', () => {
     expect(v).toMatch(/^ab[cd]$/);
   });
 
-  const i = seq(['a', 'b', integer()]);
+  const i = seq(['a', 'b', integers()]);
   expect(i).forMany(v => {
     expect(v).toMatch(/^ab\d$/);
   });
 
-  const ii = seq(['a', 'b', repeat(integer(), 5)]);
+  const ii = seq(['a', 'b', repeat(integers(), 5)]);
   expect(ii).forMany(v => {
     expect(v).toMatch(/^ab\d{5}$/);
   });
@@ -188,8 +188,8 @@ test('seq', () => {
 
 test('record', () => {
   const r = record<unknown>({
-    id: integer({ max: 10, min: 5 }),
-    str: string()
+    id: integers({ max: 10, min: 5 }),
+    str: strings()
   });
   expect(r).forMany((v: { id: number; str: string }) => {
     expect(typeof v).toBe('object');
@@ -200,8 +200,8 @@ test('record', () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const rr = record<any>({
-    id: integer({ max: 10, min: 5 }),
-    person: record({ name: string() })
+    id: integers({ max: 10, min: 5 }),
+    person: record({ name: strings() })
   });
   expect(rr).forMany((v: { id: number; person: { name: string } }) => {
     expect(v.person.name).toMatch(/^[a-zA-Z\d!@#$%^&*()]{5,20}$/);
@@ -210,8 +210,8 @@ test('record', () => {
 
 test('object', () => {
   const o = object<string | number>({
-    id: integer({ max: 10, min: 5 }),
-    str: string()
+    id: integers({ max: 10, min: 5 }),
+    str: strings()
   });
   expect(o).forMany((v: { id: number; str: string }) => {
     expect(typeof v).toBe('object');
@@ -222,8 +222,8 @@ test('object', () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const oo = object<any>({
-    id: integer({ max: 10, min: 5 }),
-    person: { name: string() }
+    id: integers({ max: 10, min: 5 }),
+    person: { name: strings() }
   });
   expect(oo).forMany((v: { id: number; person: { name: string } }) => {
     expect(v.person.name).toMatch(/^[a-zA-Z\d!@#$%^&*()]{5,20}$/);
@@ -242,13 +242,13 @@ test('randomator', () => {
     expect(v).toMatch(/^Composable Hello (World|Earth)$/);
   });
 
-  const i = randomator`Integer ${integer()}`;
+  const i = randomator`integers ${integers()}`;
   expect(i).forMany(v => {
-    expect(v).toMatch(/^Integer \d$/);
+    expect(v).toMatch(/^integers \d$/);
   });
 
-  const ii = randomator`Integer ${repeat(integer(), 5)}`;
+  const ii = randomator`integers ${repeat(integers(), 5)}`;
   expect(ii).forMany(v => {
-    expect(v).toMatch(/^Integer \d{5}$/);
+    expect(v).toMatch(/^integers \d{5}$/);
   });
 });

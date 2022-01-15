@@ -2,7 +2,8 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-_(none)_
+
+* use plural for Randomators creators to avoid confusion with types
 
 ---
 
