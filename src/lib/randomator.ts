@@ -21,7 +21,7 @@ export class Randomator<T = unknown> {
 
   constructor(private _value: GenerateFunction<T>) {}
 
-  get $() {
+  get $(): GenerateFunction<T> {
     return this.value.bind(this);
   }
 
