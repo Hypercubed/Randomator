@@ -7,5 +7,7 @@ src/**.js
 coverage
 *.log
 yarn.lock
-.vscode
+.vscode/*
+!.vscode/settings.json
 docs/
+*.tgz

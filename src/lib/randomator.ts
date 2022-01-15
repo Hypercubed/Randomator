@@ -1,4 +1,5 @@
 export type MaybeRandomator<T = unknown> = T | Randomator<MaybeRandomator<T>>;
+export type GenerateFunction<T> = () => T;
 
 export class Randomator<T = unknown> {
   static from<U>(x: U | Randomator<U> | (() => U)): Randomator<U> {
@@ -19,6 +20,10 @@ export class Randomator<T = unknown> {
   }
 
   constructor(private _value: GenerateFunction<T>) {}
+
+  get $() {
+    return this.value.bind(this);
+  }
 
   value(): T {
     let x = this._value();

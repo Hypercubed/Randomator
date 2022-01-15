@@ -1,1 +1,0 @@
-type GenerateFunction<T> = () => T;

@@ -23,7 +23,7 @@ export const ucase = char(UCASE);
 export const hexa = char('0123456789abcdef');
 
 const DefaultStringOptions = {
-  chars: char(),
+  chars: char() as MaybeRandomator<string>,
   length: integer({ min: 5, max: 20 }) as MaybeRandomator<number>
 };
 

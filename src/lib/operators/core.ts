@@ -170,11 +170,11 @@ export function repeat<T>(arg: MaybeRandomator<T>, len: number, opts = { separat
  * @param args
  * @returns
  */
-export function randomator<T>(
+export function randomator(
   strings: TemplateStringsArray | string[],
-  ...args: MaybeRandomator<T>[]
+  ...args: MaybeRandomator[]
 ): Randomator<string> {
-  const result: (MaybeRandomator<T> | string)[] = strings[0] ? [strings[0]] : [];
+  const result: (MaybeRandomator | string)[] = strings[0] ? [strings[0]] : [];
   args.forEach((arg, i) => {
     result.push(arg);
     if (strings[i + 1]) {
