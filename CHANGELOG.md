@@ -4,6 +4,9 @@ CHANGELOG
 ## HEAD (Unreleased)
 
 * use plural for Randomators creators to avoid confusion with types
+* adds unixTimestamp
+* more reasonable range for random dates
+* adds `.value` is now automatically bound to the Randomator (replaces `.$`)
 
 ---
 
