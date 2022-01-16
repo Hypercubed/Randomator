@@ -18,6 +18,15 @@ describe('number', () => {
     });
   });
 
+  test('bound tests', () => {
+    const fn = n.value;
+    Array.from({ length: 100 }, fn).forEach(v => {
+      expect(typeof v).toBe('number');
+      expect(v).toBeGreaterThanOrEqual(0);
+      expect(v).toBeLessThan(1);
+    });
+  });
+
   test('chi-squared tests', () => {
     expect(n.map(x => x < 0.5)).toPassFreqTest();
     expect(n.map(x => x < 0.55)).toPassFreqTest([true, false], [55 / 100, 1 - 55 / 100]);
@@ -30,7 +39,7 @@ describe('number', () => {
 });
 
 describe('float', () => {
-  test.only('default', () => {
+  test('default', () => {
     const zeroToOne = floats();
     expect(zeroToOne).toBeInstanceOf(Randomator);
 
