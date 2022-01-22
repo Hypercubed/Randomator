@@ -13,7 +13,7 @@ module.exports = {
   },
   globals: {
     crypto: {
-      getRandomValues: arr => crypto.randomBytes(arr.length)
-    }
-  },
+      getRandomValues: (arr) => require("crypto").randomBytes(arr.length),
+    },
+  }
 };

@@ -22,12 +22,11 @@ export class Randomator<T = unknown> {
     return x;
   }
 
-  static get [Symbol.species]() {
+  static get [Symbol.species](): typeof Randomator {
     return this;
   }
 
-  constructor(private readonly generate: GenerateFunction<T>) {;
-  }
+  constructor(private readonly generate: GenerateFunction<T>) {}
 
   /**
    * Returns a random value
@@ -36,7 +35,7 @@ export class Randomator<T = unknown> {
    */
   next = (): T => {
     return Randomator.unwrap(this.generate());
-  }
+  };
 
   /**
    * Maps random values
@@ -51,9 +50,9 @@ export class Randomator<T = unknown> {
 
   /**
    * Chain
-   * 
-   * @param mapper 
-   * @returns 
+   *
+   * @param mapper
+   * @returns
    */
   chain<U>(mapper: (_: T) => U): U {
     return mapper.call(this, this.next());

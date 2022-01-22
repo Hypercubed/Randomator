@@ -33,7 +33,7 @@ export function integers(options: Partial<typeof DefaultIntegerOptions> = Defaul
   return numbers().map(r => floor(d * r + min));
 }
 
-export function bytes() {
+export function bytes(): Randomator<number> {
   return integers({ max: 255, min: 0 });
 }
 
