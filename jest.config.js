@@ -1,3 +1,4 @@
+
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
@@ -12,7 +13,7 @@ module.exports = {
   },
   globals: {
     crypto: {
-      getRandomValues: (arr) => require("crypto").randomBytes(arr.length),
-    },
+      getRandomValues: arr => crypto.randomBytes(arr.length)
+    }
   },
 };
