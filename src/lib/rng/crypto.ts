@@ -1,7 +1,7 @@
-const crypto = window['crypto'] || window['msCrypto'];
+import crypto from '@trust/webcrypto';
 
 export function cryptoRandom(): number {
-  let cryptoRandoms: number[];
+  let cryptoRandoms: Uint32Array;
   const cryptoRandomSlices = [];
   let cryptoRandomString: string;
   while ((cryptoRandomString = '.' + cryptoRandomSlices.join('')).length < 30) {

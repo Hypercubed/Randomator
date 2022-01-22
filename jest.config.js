@@ -1,3 +1,4 @@
+// const crypto = require('@trust/webcrypto');
 
 module.exports = {
   preset: 'ts-jest',
@@ -11,9 +12,5 @@ module.exports = {
       statements: 80
     }
   },
-  globals: {
-    crypto: {
-      getRandomValues: (arr) => require("crypto").randomBytes(arr.length),
-    },
-  }
+  setupFilesAfterEnv: ['./jest.setup.js']
 };
