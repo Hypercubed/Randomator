@@ -17,7 +17,7 @@ const DefaultNumberOptions: NumberOptions = { rng: random };
  * @returns
  */
 export function numbers(options: Partial<NumberOptions> = DefaultNumberOptions): Randomator<number> {
-  let { rng } = initOptions(options, DefaultNumberOptions);
+  const { rng } = initOptions(options, DefaultNumberOptions);
   return Randomator.from(rng);
 }
 
@@ -35,15 +35,16 @@ const DefaultIntegerOptions: Partial<IntegerOptions> = { max: 9, min: 0 };
  * @returns
  */
 export function integers(options: Partial<IntegerOptions> = DefaultIntegerOptions): Randomator<number> {
-  let { max, min, rng } = initOptions(options, DefaultIntegerOptions);
+  const opts = initOptions(options, DefaultIntegerOptions);
+  let { max, min } = opts;
   max = floor(max);
   min = floor(min);
   const d = max - min + 1;
-  return numbers({ rng }).map(r => floor(d * r) + min);
+  return numbers({ rng: opts.rng }).map(r => floor(d * r) + min);
 }
 
 export function bytes(options: Partial<NumberOptions> = DefaultNumberOptions): Randomator<number> {
-  let { rng } = initOptions(options, DefaultNumberOptions);
+  const { rng } = initOptions(options, DefaultNumberOptions);
   return integers({ max: 255, min: 0, rng });
 }
 
@@ -71,6 +72,6 @@ export function floats(options: Partial<FloatOptions> = FloatDefaults): Randomat
  * @returns
  */
 export function boolean(options: Partial<NumberOptions> = DefaultNumberOptions): Randomator<boolean> {
-  let { rng } = initOptions(options, DefaultNumberOptions);
+  const { rng } = initOptions(options, DefaultNumberOptions);
   return numbers({ rng }).map(x => x < 0.5);
 }
