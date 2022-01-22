@@ -4,20 +4,21 @@ import { Randomator } from '../randomator';
 const now = Randomator.from(() => new Date().getTime());
 
 interface DateOptions {
-  max: Date | number,
-  min: Date | number
-};
+  max: Date | number;
+  min: Date | number;
+}
 
-const DefaultUnixDateOptions = {  // 32-bit signed integer
-  min:  -2147483647, // Dec 13 1901
+const DefaultUnixDateOptions = {
+  // 32-bit signed integer
+  min: -2147483647, // Dec 13 1901
   max: 2147483647 // Jan 19 2038
 };
 
 /**
  * Generates a random unix timestamp between -6857195532 and 4294967295
- * 
+ *
  * @param options (defaults between -6857195532 and 4294967295)
- * @returns 
+ * @returns
  */
 export function unixTimestamp(options: Partial<DateOptions> = DefaultUnixDateOptions): Randomator<number> {
   options = Object.assign({}, DefaultUnixDateOptions, options);
@@ -32,7 +33,7 @@ const DefaultDateOptions = {
 };
 
 /**
- * Generates a random date 
+ * Generates a random date
  *
  * @param options (defaults between Sep 14 1752 and Apr 18 2187)
  * @returns

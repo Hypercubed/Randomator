@@ -26,9 +26,15 @@ const DefaultIntegerOptions = { max: 9, min: 0 };
  * @returns
  */
 export function integers(options: Partial<typeof DefaultIntegerOptions> = DefaultIntegerOptions): Randomator<number> {
-  const { max, min } = initOptions(options, DefaultIntegerOptions);
+  let { max, min } = initOptions(options, DefaultIntegerOptions);
+  max = floor(max);
+  min = floor(min);
   const d = max - min + 1;
   return numbers().map(r => floor(d * r + min));
+}
+
+export function bytes() {
+  return integers({ max: 255, min: 0 });
 }
 
 const FloatDefaults = { max: 1, min: 0, fixed: 4 };

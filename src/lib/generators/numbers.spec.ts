@@ -19,7 +19,7 @@ describe('number', () => {
   });
 
   test('bound tests', () => {
-    const fn = n.value;
+    const fn = n.next;
     Array.from({ length: 100 }, fn).forEach(v => {
       expect(typeof v).toBe('number');
       expect(v).toBeGreaterThanOrEqual(0);
@@ -119,7 +119,7 @@ test('integer', () => {
 test('boolean', () => {
   const b = boolean();
   expect(b).toBeInstanceOf(Randomator);
-  expect(typeof b.value()).toBe('boolean');
+  expect(typeof b.next()).toBe('boolean');
 
   expect(b).toPassFreqTest([true, false]);
   expect(b).toPassRunsTest();

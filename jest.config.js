@@ -9,5 +9,10 @@ module.exports = {
       lines: 80,
       statements: 80
     }
-  }
+  },
+  globals: {
+    crypto: {
+      getRandomValues: (arr) => require("crypto").randomBytes(arr.length),
+    },
+  },
 };

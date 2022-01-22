@@ -6,8 +6,8 @@ import { chars, paragraphs, pattern, sentences, strings, uuids, words } from './
 
 test('chars', () => {
   const ch = chars();
-  expect(typeof ch.value()).toBe('string');
-  expect(ch.value()).toHaveLength(1);
+  expect(typeof ch.next()).toBe('string');
+  expect(ch.next()).toHaveLength(1);
 
   expect(ch).forMany(v => {
     expect(v).toHaveLength(1);

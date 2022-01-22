@@ -5,7 +5,7 @@ export type GenerateFunction<T> = () => T;
  * Randomator class
  */
 export class Randomator<T = unknown> {
-  static from<U>(x: U | Randomator<U> | (() => U)): Randomator<U> {
+  static from<U>(x: U | Randomator<U> | GenerateFunction<U>): Randomator<U> {
     if (x instanceof Randomator) {
       return x;
     }
@@ -17,49 +17,59 @@ export class Randomator<T = unknown> {
 
   static unwrap<U>(x: MaybeRandomator<U>): U {
     while (x instanceof Randomator) {
-      x = x.value();
+      x = x.next();
     }
     return x;
   }
 
-  constructor(private _value: GenerateFunction<T>) {
-    this.value = this.value.bind(this);
+  static get [Symbol.species]() {
+    return this;
+  }
+
+  constructor(private readonly generate: GenerateFunction<T>) {;
   }
 
   /**
    * Returns a random value
-   * 
-   * @returns 
+   *
+   * @returns
    */
-  value(): T {
-    let x = this._value();
-    while (x instanceof Randomator) {
-      x = x.value();
-    }
-    return x;
+  next = (): T => {
+    return Randomator.unwrap(this.generate());
   }
 
   /**
    * Maps random values
+   *
+   * @param mapper
+   * @returns
+   */
+  map<U>(mapper: (_: T) => MaybeRandomator<U>): Randomator<U> {
+    const chain = () => this.chain(mapper) as U;
+    return new Randomator(chain);
+  }
+
+  /**
+   * Chain
    * 
    * @param mapper 
    * @returns 
    */
-  map<U>(mapper: (_: T) => MaybeRandomator<U>): Randomator<U> {
-    return new Randomator(() => Randomator.unwrap(mapper(this.value())));
+  chain<U>(mapper: (_: T) => U): U {
+    return mapper.call(this, this.next());
   }
 
   /**
    * Filters random values
    *
-   * @param predicate 
-   * @returns 
+   * @param predicate
+   * @returns
    */
   filter(predicate: (_: T) => boolean): Randomator<T> {
     return new Randomator(() => {
-      let next = this.value();
+      let next = this.next();
       while (!predicate(next)) {
-        next = this.value();
+        next = this.next();
       }
       return next;
     });

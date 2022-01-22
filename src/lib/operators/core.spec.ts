@@ -119,7 +119,7 @@ test('unique', () => {
 
   const e = unique(oneOf(['a', 'b', 'c']), 10);
   expect(() => {
-    e.value();
+    e.next();
   }).toThrow(`Couldn't find 10 unique items from given Randomator`);
 });
 

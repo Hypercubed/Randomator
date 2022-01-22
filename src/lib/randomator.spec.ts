@@ -8,12 +8,12 @@ const inner = Randomator.from(() => a);
 const outer = Randomator.from(() => inner);
 
 test('value', () => {
-  expect(a.value()).toBe('a');
+  expect(a.next()).toBe('a');
 });
 
 test('map', () => {
   const r = a.map(_ => _ + _);
-  expect(r.value()).toBe('aa');
+  expect(r.next()).toBe('aa');
 });
 
 test('filter', () => {

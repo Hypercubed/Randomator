@@ -37,8 +37,8 @@ export function chiSquaredPValue(observations: number[], expectations: number[],
 }
 
 function median(arr: number[]) {
-  const mid = Math.floor(arr.length / 2),
-    nums = [...arr].sort((a, b) => a - b);
+  const mid = Math.floor(arr.length / 2);
+  const nums = [...arr].sort((a, b) => a - b);
   return arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
 }
 
@@ -95,12 +95,12 @@ const ALPHA = 0.001;
 expect.extend({
   toPassFreqTest(generator: Randomator, categories?: unknown[], expectations?: number[], df?: number) {
     // generate N_χ observations
-    const S = Array.from({ length: N_χ }, () => generator.value());
+    const S = Array.from({ length: N_χ }, () => generator.next());
 
     // obtain mutually exclusive classes, if not defined
     categories ??= [...new Set(S)];
 
-    // calulate expected frequency for each class assuming equal distribution, if not defined
+    // calculate expected frequency for each class assuming equal distribution, if not defined
     expectations ??= categories.map(() => 1 / categories.length);
 
     // convert frequencies to expected values
@@ -125,7 +125,7 @@ expect.extend({
   },
   toPassRunsTest(generator: Randomator) {
     // generate N_z observations
-    let S = Array.from({ length: N_z }, () => generator.value());
+    let S = Array.from({ length: N_z }, () => generator.next());
 
     // if observations are numeric, convert to a binary test by comparing to median value
     if (typeof S[0] === 'number') {
@@ -146,7 +146,7 @@ expect.extend({
     };
   },
   forMany(generator: Randomator, fn: () => void) {
-    Array.from({ length: 100 }, () => generator.value()).forEach(fn);
+    Array.from({ length: 100 }, () => generator.next()).forEach(fn);
 
     return {
       pass: true,
