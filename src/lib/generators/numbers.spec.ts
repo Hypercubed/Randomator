@@ -1,6 +1,6 @@
 import '../setupJest';
 
-import { boolean, floats, integers, numbers } from './numbers';
+import { bigIntegers, booleans, floats, integers, numbers } from './numbers';
 import { Randomator } from '../randomator';
 
 describe('number', () => {
@@ -116,11 +116,50 @@ test('integer', () => {
   expect(fiveToTen).toPassRunsTest();
 });
 
+test.only('big integer', () => {
+  const zeroToNine = bigIntegers();
+  expect(zeroToNine).toBeInstanceOf(Randomator);
+
+  expect(zeroToNine).forMany(v => {
+    expect(typeof v).toBe('bigint');
+    expect(v).toBe(~~v);
+    expect(v).toBeGreaterThanOrEqual(0);
+    expect(v).toBeLessThanOrEqual(9);
+  });
+
+  expect(zeroToNine).toPassFreqTest([0n, 1n, 2n, 3n, 4n, 5n, 6n, 7n, 8n, 9n]);
+  expect(zeroToNine).toPassRunsTest();
+
+  const zeroToTen = bigIntegers({ max: 10n });
+  expect(zeroToTen).forMany(v => {
+    expect(v).toBeGreaterThanOrEqual(0n);
+    expect(v).toBeLessThanOrEqual(10n);
+  });
+
+  expect(zeroToTen).toPassFreqTest([0n, 1n, 2n, 3n, 4n, 5n, 6n, 7n, 8n, 9n, 10n]);
+
+  const fiveToTen = bigIntegers({ max: 10n, min: 5n });
+  expect(fiveToTen).forMany(v => {
+    expect(v).toBeGreaterThanOrEqual(5n);
+    expect(v).toBeLessThanOrEqual(10n);
+  });
+  // expect(fiveToTen).toPassFreqTest([5n, 6n, 7n, 8n, 9n, 10n]);
+  expect(fiveToTen).toPassRunsTest();
+
+  const MAX_SAFE_INTEGER = BigInt(Number.MAX_SAFE_INTEGER);
+  const large = bigIntegers({ min: -2n * MAX_SAFE_INTEGER, max: 2n * MAX_SAFE_INTEGER });
+  expect(large.map(v => v < 0)).toPassFreqTest([true, false]);
+  expect(large.map(v => v / MAX_SAFE_INTEGER)).toPassFreqTest([-1n, 0n, 1n], [1 / 4, 1 / 2, 1 / 4]);
+});
+
 test('boolean', () => {
-  const b = boolean();
+  const b = booleans();
   expect(b).toBeInstanceOf(Randomator);
   expect(typeof b.next()).toBe('boolean');
 
   expect(b).toPassFreqTest([true, false]);
   expect(b).toPassRunsTest();
+
+  const b2 = booleans({ probability: 0.6667 });
+  expect(b2).toPassFreqTest([true, false], [2 / 3, 1 / 3]);
 });

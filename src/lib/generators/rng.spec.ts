@@ -1,6 +1,6 @@
 import '../setupJest';
 
-import { floats, numbers, integers, boolean } from './numbers';
+import { floats, numbers, integers, booleans } from './numbers';
 import { cryptoRandom } from '../rng/crypto';
 
 describe('numbers', () => {
@@ -63,7 +63,7 @@ test('integers', () => {
 
 test('boolean', () => {
   const rng = jest.fn(cryptoRandom);
-  const b = boolean({ rng });
+  const b = booleans({ rng });
 
   expect(b).toPassFreqTest([true, false]);
   expect(rng).toBeCalledTimes(10000);

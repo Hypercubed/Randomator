@@ -52,11 +52,11 @@ test('lorum', () => {
 
   expect(lorem.sentence).forMany(v => {
     // eslint-disable-next-line security/detect-unsafe-regex
-    expect(v).toMatch(/^[A-Z][a-zA-Z ]+[a-zA-Z][.!?]$/);
+    expect(v).toMatch(/^[A-Z][a-zA-Z ]+[a-zA-Z][.?!,;:]$/);
   });
 
   expect(lorem.paragraph).forMany(v => {
     // eslint-disable-next-line security/detect-unsafe-regex
-    expect(v).toMatch(/^([A-Z][a-zA-Z ]+[a-zA-Z][.!?] ?){3,7}$/);
+    expect(v).toMatch(/^([A-Z][a-zA-Z ]+[a-zA-Z][.?!,;:] ?){3,7}$/);
   });
 });

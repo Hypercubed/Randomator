@@ -1,12 +1,13 @@
 import { oneOf, repeat, seq } from '../operators/core';
 import { integers } from './numbers';
 import { MaybeRandomator, Randomator } from '../randomator';
-import { capitalize } from '../utils';
+import { capitalize, checkOptions } from '../utils';
+import { ALPHA, ALPHANUM, CHARS, HEX_CHARS, LCASE, PUNCTUATION, UCASE } from './strings.constants';
 
-const LCASE = 'abcdefghijklmnopqrstuvwxyz';
-const UCASE = LCASE.toUpperCase();
-const DIGITS = '0123456789';
-const CHARS = `${LCASE}${UCASE}${DIGITS}!@#$%^&*()`;
+//TODO: rng
+interface CharOptions {
+  pool?: string;
+}
 
 /**
  * Generates a random character
@@ -14,12 +15,14 @@ const CHARS = `${LCASE}${UCASE}${DIGITS}!@#$%^&*()`;
  * @param options
  * @returns
  */
-export function chars(characters: string = CHARS): Randomator<string> {
-  return oneOf(characters.split(''));
+export function chars(options: CharOptions = {}): Randomator<string> {
+  checkOptions(['pool'], options);
+  const { pool = CHARS } = options;
+  return oneOf(pool.split(''));
 }
 
 interface StringOptions {
-  chars?: MaybeRandomator<string>;
+  chars?: Randomator<string>;
   length?: MaybeRandomator<number>;
 }
 
@@ -29,10 +32,9 @@ interface StringOptions {
  * @param options
  * @returns
  */
-export function strings({
-  chars: char$ = chars(),
-  length = integers({ min: 5, max: 20 })
-}: StringOptions = {}): Randomator<string> {
+export function strings(options: StringOptions = {}): Randomator<string> {
+  checkOptions(['chars', 'length'], options);
+  const { chars: char$ = chars(), length = integers({ min: 5, max: 20 }) } = options;
   return Randomator.from(length).map((l: number) => repeat(char$, l));
 }
 
@@ -46,9 +48,11 @@ interface WordOptions {
  * @param options
  * @returns
  */
-export function words({
-  strings: string$ = strings({ chars: chars(LCASE), length: integers({ min: 1, max: 12 }) })
-}: WordOptions = {}): Randomator<string> {
+export function words(options: WordOptions = {}): Randomator<string> {
+  checkOptions(['strings', 'length'], options);
+  const {
+    strings: string$ = strings({ chars: chars({ pool: LCASE }), length: integers({ min: 1, max: 12 }) })
+  } = options;
   return oneOf([string$, string$.map(capitalize)]);
 }
 
@@ -64,11 +68,13 @@ interface SentenceOptions {
  * @param options
  * @returns
  */
-export function sentences({
-  words: word$ = words(),
-  length = integers({ min: 12, max: 18 }),
-  punctuation = chars('!?.')
-}: SentenceOptions = {}): Randomator<string> {
+export function sentences(options: SentenceOptions = {}): Randomator<string> {
+  checkOptions(['words', 'length', 'punctuation'], options);
+  const {
+    words: word$ = words(),
+    length = integers({ min: 12, max: 18 }),
+    punctuation = chars({ pool: PUNCTUATION })
+  } = options;
   const w = Randomator.from(length).map((l: number) => repeat(word$, l, { separator: ' ' }));
   return seq([w.map(capitalize), punctuation]);
 }
@@ -84,10 +90,9 @@ interface ParagraphOptions {
  * @param options
  * @returns
  */
-export function paragraphs({
-  sentences: sentence$ = sentences(),
-  length = integers({ min: 3, max: 7 })
-}: ParagraphOptions = {}): Randomator<string> {
+export function paragraphs(options: ParagraphOptions = {}): Randomator<string> {
+  checkOptions(['sentences', 'length'], options);
+  const { sentences: sentence$ = sentences(), length = integers({ min: 3, max: 7 }) } = options;
   return Randomator.from(length).map((l: number) => repeat(sentence$, l, { separator: ' ' }));
 }
 
@@ -105,22 +110,22 @@ export function pattern(pat: string, mapper: Record<string, MaybeRandomator> = M
   return seq(arr);
 }
 
-const lcase = chars(LCASE);
-const ucase = chars(UCASE);
-const hexa = chars('0123456789abcdef');
+const lcase = chars({ pool: LCASE });
+const ucase = chars({ pool: UCASE });
+const hexa = chars({ pool: HEX_CHARS });
 
 const MAP = {
-  _: lcase,
-  a: lcase,
-  x: hexa,
-  y: chars('89ab'),
-  '^': ucase,
-  A: ucase,
-  '0': integers(),
-  '#': integers(),
-  '!': integers({ max: 9, min: 1 }),
-  '?': chars(LCASE + UCASE),
-  '*': chars(LCASE + UCASE + DIGITS)
+  _: lcase, // a random lower case letter
+  a: lcase, // a random lower case letter
+  x: hexa, // a random hexadecimal character
+  y: chars({ pool: '89ab' }), // a random character from the set 89ab
+  '^': ucase, // a random upper case letter
+  A: ucase, // a random upper case letter
+  '0': integers(), // a random digit
+  '#': integers(), // a random digit
+  '!': integers({ max: 9, min: 1 }), // a random digit excluding 0
+  '?': chars({ pool: ALPHA }), // a random alpha character
+  '*': chars({ pool: ALPHANUM }) // a random alphanumeric character
 };
 
 /**

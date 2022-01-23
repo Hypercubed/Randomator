@@ -14,13 +14,13 @@ test('chars', () => {
     expect(v).toMatch(/^[a-zA-Z0-9!@#$%^&*()]$/);
   });
 
-  const ab = chars('ab');
+  const ab = chars({ pool: 'ab' });
   expect(ab).forMany(v => {
     expect(v).toMatch(/^[ab]$/);
   });
   expect(ab).toPassFreqTest(['a', 'b']);
 
-  const abc = chars('abc');
+  const abc = chars({ pool: 'abc' });
   expect(abc).forMany(v => {
     expect(v).toMatch(/^[abc]$/);
   });
@@ -34,18 +34,18 @@ test('strings', () => {
     expect(v).toMatch(/^[a-zA-Z\d!@#$%^&*()]{5,20}$/);
   });
 
-  const ab = strings({ chars: chars('ab'), length: 2 });
+  const ab = strings({ chars: chars({ pool: 'ab' }), length: 2 });
   expect(ab).forMany(v => {
     expect(v).toMatch(/^[ab][ab]$/);
   });
   expect(ab).toPassFreqTest(['aa'], [1 / 4], 3);
 
-  const ss = strings({ chars: chars('abc'), length: integers({ min: 3, max: 6 }) });
+  const ss = strings({ chars: chars({ pool: 'abc' }), length: integers({ min: 3, max: 6 }) });
   expect(ss).forMany(v => {
     expect(v).toMatch(/^[abc]{3,6}$/);
   });
 
-  const sss = integers({ min: 3, max: 6 }).map(length => strings({ length, chars: chars('abc') }));
+  const sss = integers({ min: 3, max: 6 }).map(length => strings({ length, chars: chars({ pool: 'abc' }) }));
   expect(sss).forMany(v => {
     expect(v).toMatch(/^[abc]{3,6}$/);
   });
@@ -58,7 +58,7 @@ test('word', () => {
     expect(v).toMatch(/^[a-zA-Z][a-z]{0,11}$/);
   });
 
-  const strs = strings({ chars: chars('abc'), length: integers({ min: 3, max: 5 }) });
+  const strs = strings({ chars: chars({ pool: 'abc' }), length: integers({ min: 3, max: 5 }) });
 
   expect(words({ strings: strs })).forMany(v => {
     expect(v).toMatch(/^[a-cA-C][a-c]{2,5}$/);
@@ -68,7 +68,7 @@ test('word', () => {
 test('sentence', () => {
   expect(sentences()).forMany(v => {
     expect(typeof v).toBe('string');
-    expect(v).toMatch(/^[A-Z][a-zA-Z ]+[a-zA-Z][.!?]$/);
+    expect(v).toMatch(/^[A-Z][a-zA-Z ]+[a-zA-Z][.?!,;:]$/);
   });
 });
 
@@ -76,7 +76,7 @@ test('paragraph', () => {
   expect(paragraphs()).forMany(v => {
     expect(typeof v).toBe('string');
     // eslint-disable-next-line security/detect-unsafe-regex
-    expect(v).toMatch(/^([A-Z][a-zA-Z ]+[a-zA-Z][.!?] ?){3,7}$/);
+    expect(v).toMatch(/^([A-Z][a-zA-Z ]+[a-zA-Z][.?!,;:] ?){3,7}$/);
   });
 });
 
