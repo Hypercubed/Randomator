@@ -1,7 +1,7 @@
 import { oneOf, repeat, seq } from '../operators/core';
 import { integers } from './numbers';
 import { MaybeRandomator, Randomator } from '../randomator';
-import { capitalize, initOptions } from '../utils';
+import { capitalize } from '../utils';
 
 const LCASE = 'abcdefghijklmnopqrstuvwxyz';
 const UCASE = LCASE.toUpperCase();
@@ -18,14 +18,10 @@ export function chars(characters: string = CHARS): Randomator<string> {
   return oneOf(characters.split(''));
 }
 
-export const lcase = chars(LCASE);
-export const ucase = chars(UCASE);
-export const hexa = chars('0123456789abcdef');
-
-const DefaultStringOptions = {
-  chars: chars() as MaybeRandomator<string>,
-  length: integers({ min: 5, max: 20 }) as MaybeRandomator<number>
-};
+interface StringOptions {
+  chars?: MaybeRandomator<string>;
+  length?: MaybeRandomator<number>;
+}
 
 /**
  * Generates a random string
@@ -33,14 +29,16 @@ const DefaultStringOptions = {
  * @param options
  * @returns
  */
-export function strings(options: Partial<typeof DefaultStringOptions> = DefaultStringOptions): Randomator<string> {
-  const { chars: _chars, length } = initOptions(options, DefaultStringOptions);
-  return Randomator.from(length).map((l: number) => repeat(_chars, l));
+export function strings({
+  chars: char$ = chars(),
+  length = integers({ min: 5, max: 20 })
+}: StringOptions = {}): Randomator<string> {
+  return Randomator.from(length).map((l: number) => repeat(char$, l));
 }
 
-const DefaultWordOptions = {
-  strings: strings({ chars: chars(LCASE), length: integers({ min: 1, max: 12 }) })
-};
+interface WordOptions {
+  strings?: Randomator<string>;
+}
 
 /**
  * Generates a random word
@@ -48,16 +46,17 @@ const DefaultWordOptions = {
  * @param options
  * @returns
  */
-export function words(options: Partial<typeof DefaultWordOptions> = DefaultWordOptions): Randomator<string> {
-  const { strings: _strings } = initOptions(options, DefaultWordOptions);
-  return oneOf([_strings, _strings.map(capitalize)]);
+export function words({
+  strings: string$ = strings({ chars: chars(LCASE), length: integers({ min: 1, max: 12 }) })
+}: WordOptions = {}): Randomator<string> {
+  return oneOf([string$, string$.map(capitalize)]);
 }
 
-const DefaultSentenceOptions = {
-  words: words(),
-  length: integers({ min: 12, max: 18 }),
-  punctuation: chars('!?.')
-};
+interface SentenceOptions {
+  words?: Randomator<string>;
+  length?: MaybeRandomator<number>;
+  punctuation?: MaybeRandomator<string>;
+}
 
 /**
  * Generates a random sentence
@@ -65,18 +64,19 @@ const DefaultSentenceOptions = {
  * @param options
  * @returns
  */
-export function sentences(
-  options: Partial<typeof DefaultSentenceOptions> = DefaultSentenceOptions
-): Randomator<string> {
-  const { words: _words, length, punctuation } = initOptions(options, DefaultSentenceOptions);
-  const w = Randomator.from(length).map((l: number) => repeat(_words, l, { separator: ' ' }));
+export function sentences({
+  words: word$ = words(),
+  length = integers({ min: 12, max: 18 }),
+  punctuation = chars('!?.')
+}: SentenceOptions = {}): Randomator<string> {
+  const w = Randomator.from(length).map((l: number) => repeat(word$, l, { separator: ' ' }));
   return seq([w.map(capitalize), punctuation]);
 }
 
-const DefaultParagraphOptions = {
-  sentences: sentences(),
-  length: integers({ min: 3, max: 7 }) as MaybeRandomator<number>
-};
+interface ParagraphOptions {
+  sentences?: Randomator<string>;
+  length?: MaybeRandomator<number>;
+}
 
 /**
  * Generates a random paragraph
@@ -84,11 +84,11 @@ const DefaultParagraphOptions = {
  * @param options
  * @returns
  */
-export function paragraphs(
-  options: Partial<typeof DefaultParagraphOptions> = DefaultParagraphOptions
-): Randomator<string> {
-  const { sentences: _sentences, length } = initOptions(options, DefaultParagraphOptions);
-  return Randomator.from(length).map((l: number) => repeat(_sentences, l, { separator: ' ' }));
+export function paragraphs({
+  sentences: sentence$ = sentences(),
+  length = integers({ min: 3, max: 7 })
+}: ParagraphOptions = {}): Randomator<string> {
+  return Randomator.from(length).map((l: number) => repeat(sentence$, l, { separator: ' ' }));
 }
 
 /**
@@ -104,6 +104,10 @@ export function pattern(pat: string, mapper: Record<string, MaybeRandomator> = M
   });
   return seq(arr);
 }
+
+const lcase = chars(LCASE);
+const ucase = chars(UCASE);
+const hexa = chars('0123456789abcdef');
 
 const MAP = {
   _: lcase,

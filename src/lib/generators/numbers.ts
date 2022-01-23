@@ -1,32 +1,26 @@
 import { Randomator } from '../randomator';
-import { initOptions } from '../utils';
 
 const { random, floor } = Math;
 
 type Rng = () => number;
 
 export interface NumberOptions {
-  rng: Rng;
+  rng?: Rng;
 }
-
-const DefaultNumberOptions: NumberOptions = { rng: random };
 
 /**
  * Generates a number between 0 and 1 (inclusive of 0, but excluding 1).
  *
  * @returns
  */
-export function numbers(options: Partial<NumberOptions> = DefaultNumberOptions): Randomator<number> {
-  const { rng } = initOptions(options, DefaultNumberOptions);
+export function numbers({ rng = random }: Partial<NumberOptions> = {}): Randomator<number> {
   return Randomator.from(rng);
 }
 
 export interface IntegerOptions extends NumberOptions {
-  max: number;
-  min: number;
+  max?: number;
+  min?: number;
 }
-
-const DefaultIntegerOptions: Partial<IntegerOptions> = { max: 9, min: 0 };
 
 /**
  * Generates a integer between min and max inclusive.
@@ -34,25 +28,20 @@ const DefaultIntegerOptions: Partial<IntegerOptions> = { max: 9, min: 0 };
  * @param options
  * @returns
  */
-export function integers(options: Partial<IntegerOptions> = DefaultIntegerOptions): Randomator<number> {
-  const opts = initOptions(options, DefaultIntegerOptions);
-  let { max, min } = opts;
+export function integers({ max = 9, min = 0, rng }: IntegerOptions = {}): Randomator<number> {
   max = floor(max);
   min = floor(min);
   const d = max - min + 1;
-  return numbers({ rng: opts.rng }).map(r => floor(d * r) + min);
+  return numbers({ rng }).map(r => floor(d * r) + min);
 }
 
-export function bytes(options: Partial<NumberOptions> = DefaultNumberOptions): Randomator<number> {
-  const { rng } = initOptions(options, DefaultNumberOptions);
+export function bytes({ rng }: NumberOptions = {}): Randomator<number> {
   return integers({ max: 255, min: 0, rng });
 }
 
 export interface FloatOptions extends IntegerOptions {
-  fixed: number;
+  fixed?: number;
 }
-
-const FloatDefaults: Partial<FloatOptions> = { max: 1, min: 0, fixed: 4 };
 
 /**
  * Generates a number between `min` and `max` rounded to `fixed` decimal places
@@ -60,8 +49,7 @@ const FloatDefaults: Partial<FloatOptions> = { max: 1, min: 0, fixed: 4 };
  * @param options
  * @returns
  */
-export function floats(options: Partial<FloatOptions> = FloatDefaults): Randomator<number> {
-  const { min, max, fixed, rng } = initOptions(options, FloatDefaults);
+export function floats({ min = 0, max = 1, fixed = 4, rng }: FloatOptions = {}): Randomator<number> {
   const f = Math.pow(10, fixed);
   return integers({ max: max * f, min: min * f, rng }).map(i => +(i / f).toFixed(fixed));
 }
@@ -71,7 +59,6 @@ export function floats(options: Partial<FloatOptions> = FloatDefaults): Randomat
  *
  * @returns
  */
-export function boolean(options: Partial<NumberOptions> = DefaultNumberOptions): Randomator<boolean> {
-  const { rng } = initOptions(options, DefaultNumberOptions);
+export function boolean({ rng }: NumberOptions = {}): Randomator<boolean> {
   return numbers({ rng }).map(x => x < 0.5);
 }
