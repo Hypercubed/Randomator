@@ -63,7 +63,6 @@ export interface BigIntegerOptions extends NumberOptions {
   min?: bigint;
 }
 
-// TODO: test
 export function bigIntegers(options: BigIntegerOptions = {}): Randomator<bigint> {
   checkOptions(['max', 'min', 'rng'], options);
   const { max = 9n, min = 0n, rng = Math.random } = options;
@@ -118,7 +117,6 @@ interface BooleanOptions extends NumberOptions {
  * @returns
  */
 export function booleans(options: BooleanOptions = {}): Randomator<boolean> {
-  // TODO: test probability option
   checkOptions(['rng', 'probability'], options);
   const { probability = 0.5, rng } = options;
   if (probability < 0 || probability > 1) {

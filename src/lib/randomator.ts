@@ -44,18 +44,21 @@ export class Randomator<T = unknown> {
    * @returns
    */
   map<U>(mapper: (_: T) => MaybeRandomator<U>): Randomator<U> {
-    const chain = () => this.chain(mapper) as U;
-    return new Randomator(chain);
+    return new Randomator(() => mapper.call(this, this.next()));
   }
 
   /**
-   * Chain
+   * apply
    *
    * @param mapper
    * @returns
    */
-  chain<U>(mapper: (_: T) => U): U {
-    return mapper.call(this, this.next());
+  apply<U>(mapper: (_: T) => MaybeRandomator<U>): U {
+    return Randomator.unwrap(mapper.call(this, this.next()));
+  }
+
+  pipe<U>(mapper: (_: this) => MaybeRandomator<U>): Randomator<U> {
+    return new Randomator(() => mapper.call(this, this));
   }
 
   /**
