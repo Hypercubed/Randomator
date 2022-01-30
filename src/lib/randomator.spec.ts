@@ -36,3 +36,18 @@ test('pipe', () => {
   expect(r).toBeInstanceOf(Randomator);
   expect(r).toPassFreqTest(['aa', 'bb', 'ab', 'ba']);
 });
+
+test('iterable', () => {
+  let c = 0;
+  for (let value of ab) {
+    expect(value).toMatch(/[ab]/);
+    c++;
+    if (c > 10) break;
+  }
+
+  const it = ab[Symbol.iterator]();
+  Array.from({ length: 100 }).forEach(() => {
+    expect(it.next().value).toMatch(/[ab]/);
+    expect(it.next().done).toBe(false);
+  });
+});

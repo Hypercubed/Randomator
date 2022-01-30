@@ -4,7 +4,7 @@ export type GenerateFunction<T> = () => T;
 /**
  * Randomator class
  */
-export class Randomator<T = unknown> {
+export class Randomator<T = unknown> implements Iterable<T> {
   static from<U>(x: U | Randomator<U> | GenerateFunction<U>): Randomator<U> {
     if (x instanceof Randomator) {
       return x;
@@ -27,6 +27,12 @@ export class Randomator<T = unknown> {
   }
 
   constructor(private readonly generate: GenerateFunction<T>) {}
+
+  *[Symbol.iterator]() {
+    for (;;) {
+      yield this.next();
+    }
+  }
 
   /**
    * Returns a random value
