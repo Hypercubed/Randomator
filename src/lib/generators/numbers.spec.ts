@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import '../setupJest';
 
 import { bigIntegers, booleans, bytes, floats, int32s, integers, numbers, uint32s } from './numbers';
@@ -191,7 +193,7 @@ describe('booleans', () => {
 
   test('throws on bad options', () => {
     expect(() => {
-      booleans({ probability: 2 })
+      booleans({ probability: 2 });
     }).toThrow();
   });
 });
@@ -204,7 +206,7 @@ describe('uint32s', () => {
       expect(typeof v).toBe('number');
       expect(v).toBe(~~v);
       expect(v).toBeGreaterThanOrEqual(0);
-      expect(v).toBeLessThanOrEqual(0xFFFFFFFF);
+      expect(v).toBeLessThanOrEqual(0xffffffff);
     });
   });
 });
@@ -216,8 +218,8 @@ describe('int32s', () => {
     expect(int32$).forMany(v => {
       expect(typeof v).toBe('number');
       expect(v).toBe(~~v);
-      expect(v).toBeGreaterThanOrEqual(-0x7FFFFFFF);
-      expect(v).toBeLessThanOrEqual(0x7FFFFFFF);
+      expect(v).toBeGreaterThanOrEqual(-0x7fffffff);
+      expect(v).toBeLessThanOrEqual(0x7fffffff);
     });
   });
 });

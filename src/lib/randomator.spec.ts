@@ -9,19 +9,19 @@ const outer = Randomator.from(() => inner);
 
 describe('Randomator', () => {
   test('#next', () => {
-    expect(ab.next()).toMatch(/[ab]/)
+    expect(ab.next()).toMatch(/[ab]/);
     expect(ab).toPassFreqTest(['a', 'b']);
   });
 
   test('#map', () => {
     const r = ab.map(_ => _ + _);
     expect(r).toBeInstanceOf(Randomator);
-    expect(r.next()).toMatch(/[ab][ab]/)
+    expect(r.next()).toMatch(/[ab][ab]/);
   });
 
   test('#apply', () => {
     const r = ab.apply(_ => _ + _);
-    expect(r).toMatch(/[ab][ab]/)
+    expect(r).toMatch(/[ab][ab]/);
   });
 
   test('#filter', () => {
@@ -49,7 +49,7 @@ describe('Randomator', () => {
 
   test('iterable', () => {
     let c = 0;
-    for (let value of ab) {
+    for (const value of ab) {
       expect(value).toMatch(/[ab]/);
       c++;
       if (c > 10) break;
@@ -68,5 +68,3 @@ describe('Randomator', () => {
     });
   });
 });
-
-

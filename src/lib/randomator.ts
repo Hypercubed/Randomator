@@ -28,7 +28,7 @@ export class Randomator<T = unknown> implements Iterable<T> {
 
   constructor(private readonly generate: GenerateFunction<T>) {}
 
-  *[Symbol.iterator]() {
+  *[Symbol.iterator](): Iterator<T> {
     for (;;) {
       yield this.next();
     }
@@ -83,7 +83,7 @@ export class Randomator<T = unknown> implements Iterable<T> {
     });
   }
 
-  toArray(length: number) {
+  toArray(length: number): Array<T> {
     return Array.from({ length }, () => this.next());
   }
 }
