@@ -82,4 +82,8 @@ export class Randomator<T = unknown> implements Iterable<T> {
       return next;
     });
   }
+
+  toArray(length: number) {
+    return Array.from({ length }, () => this.next());
+  }
 }

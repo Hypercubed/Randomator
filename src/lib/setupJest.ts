@@ -90,7 +90,7 @@ function zTestPValue(observations: unknown[], categories: unknown[]) {
 
 const N_χ = 10000;
 const N_z = 30;
-const ALPHA = 0.001;
+const ALPHA = process.env.CI ? 0.0001 : 0.001;
 
 expect.extend({
   toPassFreqTest(generator: Randomator, categories?: unknown[], expectations?: number[], df?: number) {
@@ -125,7 +125,7 @@ expect.extend({
   },
   toPassRunsTest(generator: Randomator) {
     // generate N_z observations
-    let S = Array.from({ length: N_z }, () => generator.next());
+    let S = generator.toArray(N_z);
 
     // if observations are numeric, convert to a binary test by comparing to median value
     if (typeof S[0] === 'number') {
@@ -146,7 +146,7 @@ expect.extend({
     };
   },
   forMany(generator: Randomator, fn: () => void) {
-    Array.from({ length: 100 }, () => generator.next()).forEach(fn);
+    generator.toArray(N_z).forEach(fn);
 
     return {
       pass: true,

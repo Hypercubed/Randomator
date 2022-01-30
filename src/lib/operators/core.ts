@@ -24,6 +24,8 @@ export function weighted<T>(arr: MaybeRandomator<T>[], weights: number[]): Rando
     const s = n * sum;
     let t = 0;
     let idx = weights.findIndex(w => s < (t += w));
+
+    /* istanbul ignore next */
     if (idx === -1) idx = weights.length - 1;
     return arr[idx];
   });
@@ -148,7 +150,7 @@ export function seq(args: MaybeRandomator[], opts = { separator: '' }): Randomat
  */
 export function array<T>(arg: MaybeRandomator<T>, length: number): Randomator<T[]> {
   const arr = Array.from({ length }).fill(arg) as MaybeRandomator<T>[];
-  return new Randomator(() => arr.map(Randomator.unwrap));
+  return tuple(arr);
 }
 
 /**
@@ -182,3 +184,7 @@ export function randomator(strings: TemplateStringsArray | string[], ...args: Ma
 }
 
 // TODO: set
+// TODO: `distinct` - returns a randomator with previously generated values filtered out
+// TODO: `cycle(n)` - returns a randomator that will repeat the same value n times
+// TODO: `iif(b, t, f)` - returns a randomator that will return a value from `t` if the value from `b` truthy, otherwise a value from `f`
+// TODO: `orElse(a, b)` - returns a randomator that will return a value from `a` if the value truthy, otherwise a value from `b`

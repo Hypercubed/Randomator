@@ -23,14 +23,12 @@ export interface IntegerOptions extends NumberOptions {
   min?: number;
 }
 
-// TODO: test
 export function uint32s(options: NumberOptions = {}): Randomator<number> {
   checkOptions(['rng'], options);
   const { rng } = options;
   return numbers({ rng }).map(r => (r * UINT32_SIZE) >>> 0);
 }
 
-// TODO: test
 export function int32s(options: NumberOptions = {}): Randomator<number> {
   checkOptions(['rng'], options);
   const { rng } = options;
