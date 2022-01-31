@@ -50,9 +50,8 @@ interface WordOptions {
  */
 export function words(options: WordOptions = {}): Randomator<string> {
   checkOptions(['strings', 'length'], options);
-  const {
-    strings: string$ = strings({ chars: chars({ pool: LCASE }), length: integers({ min: 1, max: 12 }) })
-  } = options;
+  const { strings: string$ = strings({ chars: chars({ pool: LCASE }), length: integers({ min: 1, max: 12 }) }) } =
+    options;
   return oneOf([string$, string$.map(capitalize)]);
 }
 

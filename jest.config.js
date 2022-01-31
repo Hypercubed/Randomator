@@ -12,5 +12,10 @@ module.exports = {
       statements: 80
     }
   },
+  collectCoverageFrom: [
+    "src/lib/**/*.ts",
+    "!src/lib/**/index.ts", 
+    "!src/lib/setupJest.ts",
+  ],
   setupFilesAfterEnv: ['./jest.setup.js']
 };

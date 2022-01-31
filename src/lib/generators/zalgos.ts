@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { repeat } from '../operators/core';
 import { Randomator } from '../randomator';
 import { integers } from './numbers';

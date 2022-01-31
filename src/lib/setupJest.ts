@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-namespace */
 /* istanbul ignore file */
+
+/* eslint-disable @typescript-eslint/no-namespace */
 
 declare global {
   namespace jest {
