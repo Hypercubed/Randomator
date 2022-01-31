@@ -1,336 +1,152 @@
-<!doctype html>
-<html class="default no-js">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>randomator</title>
-	<meta name="description" content="Documentation for randomator">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="assets/css/main.css">
-	<script async src="assets/js/search.js" id="search-script"></script>
-</head>
-<body>
-<header>
-	<div class="tsd-page-toolbar">
-		<div class="container">
-			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
-					<div class="field">
-						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
-						<input id="tsd-search-field" type="text" />
-					</div>
-					<ul class="results">
-						<li class="state loading">Preparing search index...</li>
-						<li class="state failure">The search index is not available</li>
-					</ul>
-					<a href="index.html" class="title">randomator</a>
-				</div>
-				<div class="table-cell" id="tsd-widgets">
-					<div id="tsd-filter">
-						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
-						<div class="tsd-filter-group">
-							<div class="tsd-select" id="tsd-filter-visibility">
-								<span class="tsd-select-label">All</span>
-								<ul class="tsd-select-list">
-									<li data-value="public">Public</li>
-									<li data-value="protected">Public/Protected</li>
-									<li data-value="private" class="selected">All</li>
-								</ul>
-							</div>
-							<input type="checkbox" id="tsd-filter-inherited" checked />
-							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-						</div>
-					</div>
-					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="tsd-page-title">
-		<div class="container">
-			<h1>randomator</h1>
-		</div>
-	</div>
-</header>
-<div class="container container-main">
-	<div class="row">
-		<div class="col-8 col-content">
-			<div class="tsd-panel tsd-typography">
-				<a href="#randomator" id="randomator" style="color: inherit; text-decoration: none;">
-					<h1>Randomator</h1>
-				</a>
-				<p>Randomator is a library for composing generators of random values.  It provides one core type, the <code>Randomator</code>, and operators for composing <code>Randomator</code>s.</p>
-				<a href="#install" id="install" style="color: inherit; text-decoration: none;">
-					<h2>Install</h2>
-				</a>
-				<pre><code><span style="color: #001080">npm</span><span style="color: #000000"> </span><span style="color: #001080">i</span><span style="color: #000000"> </span><span style="color: #001080">randomator</span>
-</code></pre>
-				<a href="#intro" id="intro" style="color: inherit; text-decoration: none;">
-					<h2>Intro</h2>
-				</a>
-				<p>A <code>Randomator</code> is a, typically random, value generator.  A <code>Randomator</code> can be constructed using the <code>new Randomator</code> constructor but more often they are constructed using the built-in <code>Randomator</code> generators or operators described below.  Every <code>Randomator</code> has a <code>value()</code> method that returns a single value.</p>
-				<p>In the most basic example the function <code>number</code> returns a Randomator (generator). In this case <code>value</code> returns a random number between 0 and 1 (same as <code>Math.random</code>).</p>
-				<blockquote>
-					<p>Note: in this readme I&#39;ll use <a href="https://medium.com/@benlesh/observables-and-finnish-notation-df8356ed1c9b">Finnish Notation</a> to signify a <code>Randomator</code>.  This is simply for clarity.</p>
-				</blockquote>
-				<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">myNumber$</span><span style="color: #000000"> = </span><span style="color: #795E26">number</span><span style="color: #000000">();</span>
-<span style="color: #001080">myNumber$</span><span style="color: #000000">.</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// Returns an random number (same as Math.random())</span>
-</code></pre>
-				<p>A more involved example is the <code>string</code> function which take several options and returns a <code>Randomator</code> of strings:</p>
-				<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">myString$</span><span style="color: #000000"> = </span><span style="color: #795E26">string</span><span style="color: #000000">({ </span><span style="color: #001080">chars:</span><span style="color: #000000"> </span><span style="color: #795E26">char</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;abc&#039;</span><span style="color: #000000">), </span><span style="color: #001080">length:</span><span style="color: #000000"> </span><span style="color: #795E26">integer</span><span style="color: #000000">({ </span><span style="color: #001080">min:</span><span style="color: #000000"> </span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #001080">max:</span><span style="color: #000000"> </span><span style="color: #098658">13</span><span style="color: #000000"> }) });</span>
-<span style="color: #001080">myString$</span><span style="color: #000000">.</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// returns a string between three (3) and 13 characters (inclusive) of &#039;a&#039;, &#039;b&#039; or &#039;c&#039;.</span>
-</code></pre>
-				<p>Randomators also include methods and operators for creating derived <code>Randomator</code>s:</p>
-				<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">ucaseString$</span><span style="color: #000000"> = </span><span style="color: #795E26">string</span><span style="color: #000000">().</span><span style="color: #795E26">map</span><span style="color: #000000">(</span><span style="color: #001080">s</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">s</span><span style="color: #000000">.</span><span style="color: #795E26">toUpperCase</span><span style="color: #000000">());</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">ucaseStringArray$</span><span style="color: #000000"> = </span><span style="color: #795E26">array</span><span style="color: #000000">(</span><span style="color: #001080">ucaseString</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">);</span>
-<span style="color: #001080">ucaseString$</span><span style="color: #000000">.</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// returns an array of three uppercase strings.</span>
-</code></pre>
-				<p>These derived <code>Randomator</code>s are lazy; meaning that no generation takes place until you invoke the <code>value</code> method.</p>
-				<a href="#built-in-randomators" id="built-in-randomators" style="color: inherit; text-decoration: none;">
-					<h2>Built-in Randomators</h2>
-				</a>
-				<a href="#numbers" id="numbers" style="color: inherit; text-decoration: none;">
-					<h3>Numbers</h3>
-				</a>
-				<a href="#number" id="number" style="color: inherit; text-decoration: none;">
-					<h4><code>number</code></h4>
-				</a>
-				<p>Generates a number between 0 and 1 (inclusive of 0, but excluding 1).  This <code>Randomator</code> is basically a wrapper around <code>Math.random</code></p>
-				<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">numbers$</span><span style="color: #000000"> = </span><span style="color: #795E26">number</span><span style="color: #000000">();</span>
-<span style="color: #001080">numbers$</span><span style="color: #000000">.</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// [0, 1) same as `Math.Random`</span>
-</code></pre>
-				<a href="#float" id="float" style="color: inherit; text-decoration: none;">
-					<h4><code>float</code></h4>
-				</a>
-				<p>Generates a number between <code>min</code> and <code>max</code> rounded to <code>fixed</code> decimal places (default: <code>{ min: 0, max: 1, fixed: 4 }</code>) inclusive of <code>min</code>, but not <code>max</code>.</p>
-				<pre><code class="language-js"><span style="color: #795E26">float</span><span style="color: #000000">().</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// [0, 1) (same as `Math.Random`)</span>
+<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>randomator</title><meta name="description" content="Documentation for randomator"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">randomator</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>randomator</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography">
+<a href="#randomator" id="randomator" style="color: inherit; text-decoration: none;">
+  <h1>Randomator</h1>
+</a>
+<p>Randomator is a library for composing generators of random values.  It provides one core type, the <code>Randomator</code> (a random generator), and operators for composing <code>Randomator</code>s.</p>
 
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">otherFloat$</span><span style="color: #000000"> = </span><span style="color: #795E26">float</span><span style="color: #000000">({ </span><span style="color: #001080">min:</span><span style="color: #000000"> -</span><span style="color: #098658">1e10</span><span style="color: #000000">, </span><span style="color: #001080">max:</span><span style="color: #000000"> </span><span style="color: #098658">1e10</span><span style="color: #000000">, </span><span style="color: #001080">fixed:</span><span style="color: #000000"> </span><span style="color: #098658">0</span><span style="color: #000000"> });</span>
-<span style="color: #001080">otherFloat$</span><span style="color: #000000">.</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// [-1e10, 1e10)</span>
+<a href="#install" id="install" style="color: inherit; text-decoration: none;">
+  <h2>Install</h2>
+</a>
+<pre><code><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-0">i</span><span class="hl-1"> </span><span class="hl-0">randomator</span>
 </code></pre>
-				<a href="#integer" id="integer" style="color: inherit; text-decoration: none;">
-					<h4><code>integer</code></h4>
-				</a>
-				<p>Generates a integer between min and max (default: <code>{ min: 0, max: 10 }</code>) inclusive of <code>min</code>, but not <code>max</code>.</p>
-				<pre><code class="language-js"><span style="color: #795E26">integer</span><span style="color: #000000">().</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// [0, 10) (aka a single digit)</span>
-<span style="color: #795E26">integer</span><span style="color: #000000">({ </span><span style="color: #001080">min:</span><span style="color: #000000"> </span><span style="color: #098658">5</span><span style="color: #000000">, </span><span style="color: #001080">max:</span><span style="color: #000000"> </span><span style="color: #098658">12</span><span style="color: #000000"> }).</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// [5,12)</span>
+
+<a href="#intro" id="intro" style="color: inherit; text-decoration: none;">
+  <h2>Intro</h2>
+</a>
+<p>A <code>Randomator</code> is a, typically random, value generator.  A <code>Randomator</code> can be constructed using the <code>new Randomator</code> constructor but more often they are constructed using the built-in operators described below.  Every <code>Randomator</code> has a <code>next()</code> method that returns a single value.</p>
+<blockquote>
+<p>A <code>Randomator</code> is a random generator that describes how to produce random values.</p>
+</blockquote>
+<p>In the most basic example the function <code>numbers</code> returns a <code>Randomator</code>. In this case <code>next</code> returns a random number between 0 and 1 (same as <code>Math.random</code>).</p>
+<blockquote>
+<p>Note: in this readme I&#39;ll use <a href="https://medium.com/@benlesh/observables-and-finnish-notation-df8356ed1c9b">Finnish Notation</a> to signify a <code>Randomator</code>.  This is simply for clarity.</p>
+</blockquote>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">myNumber$</span><span class="hl-1"> = </span><span class="hl-4">numbers</span><span class="hl-1">();</span><br/><span class="hl-0">myNumber$</span><span class="hl-1">.</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// Returns an random number (same as Math.random())</span>
 </code></pre>
-				<a href="#strings" id="strings" style="color: inherit; text-decoration: none;">
-					<h3>Strings</h3>
-				</a>
-				<a href="#char" id="char" style="color: inherit; text-decoration: none;">
-					<h4><code>char</code></h4>
-				</a>
-				<pre><code class="language-js"><span style="color: #795E26">char</span><span style="color: #000000">().</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// returns a random character (one of `abcdefghijklmnopqrstuvwxyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&amp;*()`).</span>
-<span style="color: #795E26">char</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;!@#$&#039;</span><span style="color: #000000">).</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// returns a random character from the set &#039;!@#$&#039;</span>
+<p>A more involved example is the <code>string</code> function which take several options and returns a <code>Randomator</code> of strings:</p>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">myString$</span><span class="hl-1"> = </span><span class="hl-4">strings</span><span class="hl-1">({ </span><span class="hl-0">chars:</span><span class="hl-1"> </span><span class="hl-4">chars</span><span class="hl-1">(</span><span class="hl-6">&#39;abc&#39;</span><span class="hl-1">), </span><span class="hl-0">length:</span><span class="hl-1"> </span><span class="hl-4">integers</span><span class="hl-1">({ </span><span class="hl-0">min:</span><span class="hl-1"> </span><span class="hl-7">3</span><span class="hl-1">, </span><span class="hl-0">max:</span><span class="hl-1"> </span><span class="hl-7">13</span><span class="hl-1"> }) });</span><br/><span class="hl-0">myString$</span><span class="hl-1">.</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// returns a string between three (3) and 13 characters (inclusive) of &#39;a&#39;, &#39;b&#39; or &#39;c&#39;.</span>
 </code></pre>
-				<a href="#string" id="string" style="color: inherit; text-decoration: none;">
-					<h4><code>string</code></h4>
-				</a>
-				<pre><code class="language-js"><span style="color: #795E26">string</span><span style="color: #000000">().</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// returns a random string with between 5 and 20 lowercase characters.</span>
-<span style="color: #795E26">string</span><span style="color: #000000">({ </span><span style="color: #001080">length:</span><span style="color: #000000"> </span><span style="color: #098658">5</span><span style="color: #000000"> }).</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// returns a string of five lowercase characters.</span>
-<span style="color: #795E26">string</span><span style="color: #000000">({ </span><span style="color: #001080">length:</span><span style="color: #000000"> </span><span style="color: #795E26">integer</span><span style="color: #000000">({ </span><span style="color: #001080">min:</span><span style="color: #000000"> </span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #001080">max:</span><span style="color: #000000"> </span><span style="color: #098658">13</span><span style="color: #000000"> }) }).</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// returns a string between 3 and 13 lowercase characters.</span>
+<p>Randomators also include a <code>map</code> for creating derived <code>Randomator</code>s:</p>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">ucaseString$</span><span class="hl-1"> = </span><span class="hl-4">string</span><span class="hl-1">().</span><span class="hl-4">map</span><span class="hl-1">(</span><span class="hl-0">s</span><span class="hl-1"> </span><span class="hl-2">=&gt;</span><span class="hl-1"> </span><span class="hl-0">s</span><span class="hl-1">.</span><span class="hl-4">toUpperCase</span><span class="hl-1">());</span><br/><span class="hl-0">ucaseString$</span><span class="hl-1">.</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// returns random uppercase strings.</span>
 </code></pre>
-				<a href="#dates" id="dates" style="color: inherit; text-decoration: none;">
-					<h3>Dates</h3>
-				</a>
-				<a href="#date" id="date" style="color: inherit; text-decoration: none;">
-					<h4><code>date</code></h4>
-				</a>
-				<pre><code class="language-js"><span style="color: #795E26">date</span><span style="color: #000000">().</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// returns a date between 20 Apr -271821 and 13 Sep 275760</span>
-<span style="color: #795E26">date</span><span style="color: #000000">({ </span><span style="color: #001080">min:</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">Date</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;1/1/1970&#039;</span><span style="color: #000000">), </span><span style="color: #001080">max:</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">Date</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;1/1/2020&#039;</span><span style="color: #000000">) }).</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// returns a string between 1 Jan 1970 and 1 Jan 2020</span>
+<p>These derived <code>Randomator</code>s are lazy; meaning that no generation takes place until you invoke the <code>value</code> method.</p>
+
+<a href="#built-in-randomators" id="built-in-randomators" style="color: inherit; text-decoration: none;">
+  <h2>Built-in Randomators</h2>
+</a>
+
+<a href="#numbers" id="numbers" style="color: inherit; text-decoration: none;">
+  <h3>Numbers</h3>
+</a>
+
+<a href="#numbers-1" id="numbers-1" style="color: inherit; text-decoration: none;">
+  <h4><code>numbers</code></h4>
+</a>
+<p>Generates a number between 0 and 1 (inclusive of 0, but excluding 1).  This <code>Randomator</code> is basically a wrapper around <code>Math.random</code></p>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">numbers$</span><span class="hl-1"> = </span><span class="hl-4">numbers</span><span class="hl-1">();</span><br/><span class="hl-0">numbers$</span><span class="hl-1">.</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// [0, 1) same as `Math.Random`</span>
 </code></pre>
-				<a href="#past" id="past" style="color: inherit; text-decoration: none;">
-					<h4><code>past</code></h4>
-				</a>
-				<pre><code class="language-js"><span style="color: #795E26">past</span><span style="color: #000000">().</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// returns a date between 20 Apr -271821 and the moment `value` is invoked</span>
-<span style="color: #795E26">past</span><span style="color: #000000">({ </span><span style="color: #001080">min:</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">Date</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;1/1/1970&#039;</span><span style="color: #000000">) }).</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// returns a string between 1 Jan 1970 and now</span>
+
+<a href="#floats" id="floats" style="color: inherit; text-decoration: none;">
+  <h4><code>floats</code></h4>
+</a>
+<p>Generates a number between <code>min</code> and <code>max</code> rounded to <code>fixed</code> decimal places (default: <code>{ min: 0, max: 1, fixed: 4 }</code>) inclusive of <code>min</code>, but not <code>max</code>.</p>
+<pre><code class="language-js"><span class="hl-4">floats</span><span class="hl-1">().</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// [0, 1) (same as `Math.Random`)</span><br/><br/><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">otherFloat$</span><span class="hl-1"> = </span><span class="hl-4">floats</span><span class="hl-1">({ </span><span class="hl-0">min:</span><span class="hl-1"> -</span><span class="hl-7">1e10</span><span class="hl-1">, </span><span class="hl-0">max:</span><span class="hl-1"> </span><span class="hl-7">1e10</span><span class="hl-1">, </span><span class="hl-0">fixed:</span><span class="hl-1"> </span><span class="hl-7">0</span><span class="hl-1"> });</span><br/><span class="hl-0">otherFloat$</span><span class="hl-1">.</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// [-1e10, 1e10)</span>
 </code></pre>
-				<a href="#future" id="future" style="color: inherit; text-decoration: none;">
-					<h4><code>future</code></h4>
-				</a>
-				<pre><code class="language-js"><span style="color: #795E26">future</span><span style="color: #000000">().</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// returns a date between the moment `value` is invoked and 13 Sep 275760</span>
-<span style="color: #795E26">future</span><span style="color: #000000">({ </span><span style="color: #001080">max:</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">Date</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;1/1/2020&#039;</span><span style="color: #000000">) }).</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// returns a string between now and 1 Jan 2020</span>
+
+<a href="#integers" id="integers" style="color: inherit; text-decoration: none;">
+  <h4><code>integers</code></h4>
+</a>
+<p>Generates a integer between min and max (default: <code>{ min: 0, max: 9 }</code>) inclusive of <code>min</code> and <code>max</code>.</p>
+<pre><code class="language-js"><span class="hl-4">integers</span><span class="hl-1">().</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// [0, 9] (aka a single digit)</span><br/><span class="hl-4">integers</span><span class="hl-1">({ </span><span class="hl-0">min:</span><span class="hl-1"> </span><span class="hl-7">5</span><span class="hl-1">, </span><span class="hl-0">max:</span><span class="hl-1"> </span><span class="hl-7">12</span><span class="hl-1"> }).</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// [5,12]</span>
 </code></pre>
-				<a href="#operators" id="operators" style="color: inherit; text-decoration: none;">
-					<h2>Operators</h2>
-				</a>
-				<p>Operators are functions which can be called to create a new <code>Randomator</code>s.</p>
-				<a href="#oneof" id="oneof" style="color: inherit; text-decoration: none;">
-					<h3><code>oneOf</code></h3>
-				</a>
-				<pre><code class="language-js"><span style="color: #795E26">oneOf</span><span style="color: #000000">([</span><span style="color: #A31515">&#039;yes&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;no&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;maybe&#039;</span><span style="color: #000000">]).</span><span style="color: #795E26">value</span><span style="color: #000000">(); </span><span style="color: #008000">// returns one random value from input array</span>
+
+<a href="#strings" id="strings" style="color: inherit; text-decoration: none;">
+  <h3>Strings</h3>
+</a>
+
+<a href="#chars" id="chars" style="color: inherit; text-decoration: none;">
+  <h4><code>chars</code></h4>
+</a>
+<pre><code class="language-js"><span class="hl-4">chars</span><span class="hl-1">().</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// returns a random character (one of `abcdefghijklmnopqrstuvwxyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&amp;*()`).</span><br/><span class="hl-4">chars</span><span class="hl-1">(</span><span class="hl-6">&#39;!@#$&#39;</span><span class="hl-1">).</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// returns a random character from the set &#39;!@#$&#39;</span>
 </code></pre>
-				<a href="#tuple" id="tuple" style="color: inherit; text-decoration: none;">
-					<h3><code>tuple</code></h3>
-				</a>
-				<pre><code class="language-js"><span style="color: #795E26">tuple</span><span style="color: #000000">([</span><span style="color: #795E26">integer</span><span style="color: #000000">(), </span><span style="color: #795E26">string</span><span style="color: #000000">()]).</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// returns an array (equivalant to [integer().value(), string().value()])</span>
+
+<a href="#strings-1" id="strings-1" style="color: inherit; text-decoration: none;">
+  <h4><code>strings</code></h4>
+</a>
+<pre><code class="language-js"><span class="hl-4">strings</span><span class="hl-1">().</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// returns a random string with between 5 and 20 lowercase characters.</span><br/><span class="hl-4">strings</span><span class="hl-1">({ </span><span class="hl-0">length:</span><span class="hl-1"> </span><span class="hl-7">5</span><span class="hl-1"> }).</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// returns a string of five lowercase characters.</span><br/><span class="hl-4">strings</span><span class="hl-1">({ </span><span class="hl-0">length:</span><span class="hl-1"> </span><span class="hl-4">integer</span><span class="hl-1">({ </span><span class="hl-0">min:</span><span class="hl-1"> </span><span class="hl-7">3</span><span class="hl-1">, </span><span class="hl-0">max:</span><span class="hl-1"> </span><span class="hl-7">13</span><span class="hl-1"> }) }).</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// returns a string between 3 and 13 lowercase characters.</span>
 </code></pre>
-				<a href="#array" id="array" style="color: inherit; text-decoration: none;">
-					<h3><code>array</code></h3>
-				</a>
-				<pre><code class="language-js"><span style="color: #795E26">array</span><span style="color: #000000">(</span><span style="color: #795E26">string</span><span style="color: #000000">(), </span><span style="color: #098658">3</span><span style="color: #000000">).</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// returns an array of three (3) random strings</span>
-<span style="color: #795E26">integer</span><span style="color: #000000">({ </span><span style="color: #001080">min:</span><span style="color: #000000"> </span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #001080">max:</span><span style="color: #000000"> </span><span style="color: #098658">6</span><span style="color: #000000"> }.</span><span style="color: #795E26">map</span><span style="color: #000000">(</span><span style="color: #001080">length</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #795E26">array</span><span style="color: #000000">(</span><span style="color: #795E26">string</span><span style="color: #000000">(),</span><span style="color: #001080">length</span><span style="color: #000000">).</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// returns an array of between three (3) and six (6) random strings</span>
+
+<a href="#dates" id="dates" style="color: inherit; text-decoration: none;">
+  <h3>Dates</h3>
+</a>
+
+<a href="#dates-1" id="dates-1" style="color: inherit; text-decoration: none;">
+  <h4><code>dates</code></h4>
+</a>
+<pre><code class="language-js"><span class="hl-4">dates</span><span class="hl-1">().</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// returns a date between Sep 14 1752 and Apr 18 2187</span><br/><span class="hl-4">dates</span><span class="hl-1">({ </span><span class="hl-0">min:</span><span class="hl-1"> </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-8">Date</span><span class="hl-1">(</span><span class="hl-6">&#39;1/1/1970&#39;</span><span class="hl-1">), </span><span class="hl-0">max:</span><span class="hl-1"> </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-8">Date</span><span class="hl-1">(</span><span class="hl-6">&#39;1/1/2020&#39;</span><span class="hl-1">) }).</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// returns a string between 1 Jan 1970 and 1 Jan 2020</span>
 </code></pre>
-				<a href="#seq" id="seq" style="color: inherit; text-decoration: none;">
-					<h3><code>seq</code></h3>
-				</a>
-				<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">name$</span><span style="color: #000000"> = </span><span style="color: #795E26">string</span><span style="color: #000000">().</span><span style="color: #795E26">map</span><span style="color: #000000">(</span><span style="color: #001080">capitalize</span><span style="color: #000000">);</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">age$</span><span style="color: #000000"> = </span><span style="color: #795E26">integer</span><span style="color: #000000">({ </span><span style="color: #001080">min:</span><span style="color: #000000"> </span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #001080">max:</span><span style="color: #000000"> </span><span style="color: #098658">12</span><span style="color: #000000"> });</span>
-<span style="color: #795E26">seq</span><span style="color: #000000">([</span><span style="color: #001080">name$</span><span style="color: #000000">, </span><span style="color: #A31515">&#039; is &#039;</span><span style="color: #000000">, </span><span style="color: #001080">age$</span><span style="color: #000000">]).</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// returns a random string like `{string} is {integer}`</span>
+
+<a href="#past" id="past" style="color: inherit; text-decoration: none;">
+  <h4><code>past</code></h4>
+</a>
+<pre><code class="language-js"><span class="hl-4">pasts</span><span class="hl-1">().</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// returns a date between Sep 14 1752 and the moment `next` is invoked</span><br/><span class="hl-4">pasts</span><span class="hl-1">({ </span><span class="hl-0">min:</span><span class="hl-1"> </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-8">Date</span><span class="hl-1">(</span><span class="hl-6">&#39;1/1/1970&#39;</span><span class="hl-1">) }).</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// returns a string between 1 Jan 1970 and now</span>
 </code></pre>
-				<a href="#randomator-tag-function" id="randomator-tag-function" style="color: inherit; text-decoration: none;">
-					<h2><code>randomator</code> Tag Function</h2>
-				</a>
-				<p>Randomator provides a <code>randomator</code> tag function which is essentially a wrapper around the <code>seq</code> operator:</p>
-				<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">name$</span><span style="color: #000000"> = </span><span style="color: #795E26">string</span><span style="color: #000000">().</span><span style="color: #795E26">map</span><span style="color: #000000">(</span><span style="color: #001080">capitalize</span><span style="color: #000000">);</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">age$</span><span style="color: #000000"> = </span><span style="color: #795E26">integer</span><span style="color: #000000">({ </span><span style="color: #001080">min:</span><span style="color: #000000"> </span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #001080">max:</span><span style="color: #000000"> </span><span style="color: #098658">12</span><span style="color: #000000"> });</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">phrases$</span><span style="color: #000000"> = </span><span style="color: #795E26">randomator</span><span style="color: #A31515">`</span><span style="color: #0000FF">${</span><span style="color: #001080">name$</span><span style="color: #0000FF">}</span><span style="color: #A31515"> is </span><span style="color: #0000FF">${</span><span style="color: #001080">age$</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">;</span>
-<span style="color: #001080">phrases$</span><span style="color: #000000">.</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// same as seq([name, &#039; is &#039;, age]).value();</span>
+
+<a href="#future" id="future" style="color: inherit; text-decoration: none;">
+  <h4><code>future</code></h4>
+</a>
+<pre><code class="language-js"><span class="hl-4">future</span><span class="hl-1">().</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// returns a date between the moment `next` is invoked and Apr 18 2187</span><br/><span class="hl-4">future</span><span class="hl-1">({ </span><span class="hl-0">max:</span><span class="hl-1"> </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-8">Date</span><span class="hl-1">(</span><span class="hl-6">&#39;1/1/2020&#39;</span><span class="hl-1">) }).</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// returns a string between now and 1 Jan 2020</span>
 </code></pre>
-				<a href="#custom-randomator" id="custom-randomator" style="color: inherit; text-decoration: none;">
-					<h2>Custom Randomator</h2>
-				</a>
-				<p><code>Randomator</code> instance includes a <code>map</code> method for creating custom <code>Randomator</code> from existing ones.</p>
-				<a href="#randomatormap" id="randomatormap" style="color: inherit; text-decoration: none;">
-					<h3><code>Randomator#map</code></h3>
-				</a>
-				<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">myString$</span><span style="color: #000000"> = </span><span style="color: #795E26">string</span><span style="color: #000000">({ </span><span style="color: #001080">length:</span><span style="color: #000000"> </span><span style="color: #795E26">integer</span><span style="color: #000000">({ </span><span style="color: #001080">min:</span><span style="color: #000000"> </span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #001080">max:</span><span style="color: #000000"> </span><span style="color: #098658">13</span><span style="color: #000000"> }) }).</span><span style="color: #795E26">map</span><span style="color: #000000">(</span><span style="color: #001080">s</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">s</span><span style="color: #000000">.</span><span style="color: #795E26">toUpperCase</span><span style="color: #000000">());</span>
-<span style="color: #001080">myString$</span><span style="color: #000000">.</span><span style="color: #795E26">value</span><span style="color: #000000">();  </span><span style="color: #008000">// returns a strings between 3 and 13 uppercase characters.</span>
+
+<a href="#operators" id="operators" style="color: inherit; text-decoration: none;">
+  <h2>Operators</h2>
+</a>
+<p>Operators are functions which can be called to create a new <code>Randomator</code>s.</p>
+
+<a href="#oneof" id="oneof" style="color: inherit; text-decoration: none;">
+  <h3><code>oneOf</code></h3>
+</a>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">yesNoMaybe$</span><span class="hl-1"> = </span><span class="hl-4">oneOf</span><span class="hl-1">([</span><span class="hl-6">&#39;yes&#39;</span><span class="hl-1">, </span><span class="hl-6">&#39;no&#39;</span><span class="hl-1">, </span><span class="hl-6">&#39;maybe&#39;</span><span class="hl-1">]);</span><br/><span class="hl-0">yesNoMaybe$</span><span class="hl-1">.</span><span class="hl-4">next</span><span class="hl-1">(); </span><span class="hl-5">// returns one random value from input array</span>
 </code></pre>
-				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
-					<h2>License</h2>
-				</a>
-				<p>This project is licensed under the MIT License - see the LICENSE file for details</p>
-			</div>
-		</div>
-		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
-			<nav class="tsd-navigation primary">
-				<ul>
-					<li class=" ">
-						<a href="modules.html">Exports</a>
-					</li>
-				</ul>
-			</nav>
-			<nav class="tsd-navigation secondary menu-sticky">
-				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="classes/randomator.html" class="tsd-kind-icon">Randomator</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/integeroptions.html" class="tsd-kind-icon">Integer<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
-						<a href="modules.html#mayberandomator" class="tsd-kind-icon">Maybe<wbr>Randomator</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="modules.html#hexa" class="tsd-kind-icon">hexa</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="modules.html#lcase" class="tsd-kind-icon">lcase</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="modules.html#ucase" class="tsd-kind-icon">ucase</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#array" class="tsd-kind-icon">array</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#boolean" class="tsd-kind-icon">boolean</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#char" class="tsd-kind-icon">char</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#date" class="tsd-kind-icon">date</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#float" class="tsd-kind-icon">float</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#future" class="tsd-kind-icon">future</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#integer" class="tsd-kind-icon">integer</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#number" class="tsd-kind-icon">number</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#object" class="tsd-kind-icon">object</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#oneof" class="tsd-kind-icon">one<wbr>Of</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#paragraph" class="tsd-kind-icon">paragraph</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#past" class="tsd-kind-icon">past</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#pattern" class="tsd-kind-icon">pattern</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#randomator" class="tsd-kind-icon">randomator</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#record" class="tsd-kind-icon">record</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#repeat" class="tsd-kind-icon">repeat</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#sentence" class="tsd-kind-icon">sentence</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#seq" class="tsd-kind-icon">seq</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#shuffle" class="tsd-kind-icon">shuffle</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#string" class="tsd-kind-icon">string</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#tuple" class="tsd-kind-icon">tuple</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#unique" class="tsd-kind-icon">unique</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#uuid" class="tsd-kind-icon">uuid</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#weighted" class="tsd-kind-icon">weighted</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#word" class="tsd-kind-icon">word</a>
-					</li>
-				</ul>
-			</nav>
-		</div>
-	</div>
-</div>
-<footer class="with-border-bottom">
-	<div class="container">
-		<h2>Legend</h2>
-		<div class="tsd-legend-group">
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-		</div>
-	</div>
-</footer>
-<div class="container tsd-generator">
-	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
-</div>
-<div class="overlay"></div>
-<script src="assets/js/main.js"></script>
-</body>
-</html>
+
+<a href="#tuple" id="tuple" style="color: inherit; text-decoration: none;">
+  <h3><code>tuple</code></h3>
+</a>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">tuple$</span><span class="hl-1"> = </span><span class="hl-4">tuple</span><span class="hl-1">([</span><span class="hl-4">integer</span><span class="hl-1">(), </span><span class="hl-4">string</span><span class="hl-1">()]);</span><br/><span class="hl-0">tuple$</span><span class="hl-1">.</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// returns an array (equivalent to [integer().next(), string().next()])</span>
+</code></pre>
+
+<a href="#array" id="array" style="color: inherit; text-decoration: none;">
+  <h3><code>array</code></h3>
+</a>
+<pre><code class="language-js"><span class="hl-4">array</span><span class="hl-1">(</span><span class="hl-4">string</span><span class="hl-1">(), </span><span class="hl-7">3</span><span class="hl-1">).</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// returns an array of three (3) random strings</span><br/><span class="hl-4">integer</span><span class="hl-1">({ </span><span class="hl-0">min:</span><span class="hl-1"> </span><span class="hl-7">0</span><span class="hl-1">, </span><span class="hl-0">max:</span><span class="hl-1"> </span><span class="hl-7">6</span><span class="hl-1"> }.</span><span class="hl-4">map</span><span class="hl-1">(</span><span class="hl-0">length</span><span class="hl-1"> </span><span class="hl-2">=&gt;</span><span class="hl-1"> </span><span class="hl-4">array</span><span class="hl-1">(</span><span class="hl-4">string</span><span class="hl-1">(), </span><span class="hl-0">length</span><span class="hl-1">).</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// returns an array of between three (3) and six (6) random strings</span>
+</code></pre>
+
+<a href="#seq" id="seq" style="color: inherit; text-decoration: none;">
+  <h3><code>seq</code></h3>
+</a>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">name$</span><span class="hl-1"> = </span><span class="hl-4">string</span><span class="hl-1">().</span><span class="hl-4">map</span><span class="hl-1">(</span><span class="hl-0">capitalize</span><span class="hl-1">);</span><br/><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">age$</span><span class="hl-1"> = </span><span class="hl-4">integer</span><span class="hl-1">({ </span><span class="hl-0">min:</span><span class="hl-1"> </span><span class="hl-7">0</span><span class="hl-1">, </span><span class="hl-0">max:</span><span class="hl-1"> </span><span class="hl-7">12</span><span class="hl-1"> });</span><br/><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">phrase$</span><span class="hl-1"> = </span><span class="hl-4">seq</span><span class="hl-1">([</span><span class="hl-0">name$</span><span class="hl-1">, </span><span class="hl-6">&#39; is &#39;</span><span class="hl-1">, </span><span class="hl-0">age$</span><span class="hl-1">]);</span><br/><span class="hl-0">phrase$</span><span class="hl-1">.</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// returns a random string like `{string} is {integer}`</span>
+</code></pre>
+
+<a href="#randomator-tag-function" id="randomator-tag-function" style="color: inherit; text-decoration: none;">
+  <h2><code>randomator</code> Tag Function</h2>
+</a>
+<p>A <code>randomator</code> tagged template function which is essentially a wrapper around the <code>seq</code> operator:</p>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">name$</span><span class="hl-1"> = </span><span class="hl-4">strings</span><span class="hl-1">().</span><span class="hl-4">map</span><span class="hl-1">(</span><span class="hl-0">capitalize</span><span class="hl-1">);</span><br/><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">age$</span><span class="hl-1"> = </span><span class="hl-4">integers</span><span class="hl-1">({ </span><span class="hl-0">min:</span><span class="hl-1"> </span><span class="hl-7">0</span><span class="hl-1">, </span><span class="hl-0">max:</span><span class="hl-1"> </span><span class="hl-7">12</span><span class="hl-1"> });</span><br/><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">phrase$</span><span class="hl-1"> = </span><span class="hl-4">randomator</span><span class="hl-6">`</span><span class="hl-2">${</span><span class="hl-0">name$</span><span class="hl-2">}</span><span class="hl-6"> is </span><span class="hl-2">${</span><span class="hl-0">age$</span><span class="hl-2">}</span><span class="hl-6">`</span><span class="hl-1">;</span><br/><span class="hl-0">phrase$</span><span class="hl-1">.</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// same as seq([name, &#39; is &#39;, age]).next();</span>
+</code></pre>
+
+<a href="#custom-randomator" id="custom-randomator" style="color: inherit; text-decoration: none;">
+  <h2>Custom Randomator</h2>
+</a>
+<p><code>Randomator</code> instance includes a <code>map</code> method for creating custom <code>Randomator</code>s from existing ones.</p>
+
+<a href="#randomatormap" id="randomatormap" style="color: inherit; text-decoration: none;">
+  <h3><code>Randomator#map</code></h3>
+</a>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">myString$</span><span class="hl-1"> = </span><span class="hl-4">strings</span><span class="hl-1">({ </span><span class="hl-0">length:</span><span class="hl-1"> </span><span class="hl-4">integer</span><span class="hl-1">({ </span><span class="hl-0">min:</span><span class="hl-1"> </span><span class="hl-7">3</span><span class="hl-1">, </span><span class="hl-0">max:</span><span class="hl-1"> </span><span class="hl-7">13</span><span class="hl-1"> }) }).</span><span class="hl-4">map</span><span class="hl-1">(</span><span class="hl-0">s</span><span class="hl-1"> </span><span class="hl-2">=&gt;</span><span class="hl-1"> </span><span class="hl-0">s</span><span class="hl-1">.</span><span class="hl-4">toUpperCase</span><span class="hl-1">());</span><br/><span class="hl-0">myString$</span><span class="hl-1">.</span><span class="hl-4">next</span><span class="hl-1">();  </span><span class="hl-5">// returns a strings between 3 and 13 uppercase characters.</span>
+</code></pre>
+
+<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+  <h2>License</h2>
+</a>
+<p>This project is licensed under the MIT License - see the LICENSE file for details</p>
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Exports</a></li></ul></nav><nav class="tsd-navigation secondary menu-sticky"><ul><li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/Randomator.html" class="tsd-kind-icon">Randomator</a></li><li class="tsd-kind-interface"><a href="interfaces/BigIntegerOptions.html" class="tsd-kind-icon">Big<wbr/>Integer<wbr/>Options</a></li><li class="tsd-kind-interface"><a href="interfaces/FloatOptions.html" class="tsd-kind-icon">Float<wbr/>Options</a></li><li class="tsd-kind-interface"><a href="interfaces/IntegerOptions.html" class="tsd-kind-icon">Integer<wbr/>Options</a></li><li class="tsd-kind-interface"><a href="interfaces/NumberOptions.html" class="tsd-kind-icon">Number<wbr/>Options</a></li><li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="modules.html#GenerateFunction" class="tsd-kind-icon">Generate<wbr/>Function</a></li><li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="modules.html#MaybeRandomator" class="tsd-kind-icon">Maybe<wbr/>Randomator</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#array" class="tsd-kind-icon">array</a></li><li class="tsd-kind-function"><a href="modules.html#bigIntegers" class="tsd-kind-icon">big<wbr/>Integers</a></li><li class="tsd-kind-function"><a href="modules.html#booleans" class="tsd-kind-icon">booleans</a></li><li class="tsd-kind-function"><a href="modules.html#bytes" class="tsd-kind-icon">bytes</a></li><li class="tsd-kind-function"><a href="modules.html#chars" class="tsd-kind-icon">chars</a></li><li class="tsd-kind-function"><a href="modules.html#dates" class="tsd-kind-icon">dates</a></li><li class="tsd-kind-function"><a href="modules.html#floats" class="tsd-kind-icon">floats</a></li><li class="tsd-kind-function"><a href="modules.html#future" class="tsd-kind-icon">future</a></li><li class="tsd-kind-function"><a href="modules.html#int32s" class="tsd-kind-icon">int32s</a></li><li class="tsd-kind-function"><a href="modules.html#integers" class="tsd-kind-icon">integers</a></li><li class="tsd-kind-function"><a href="modules.html#numbers" class="tsd-kind-icon">numbers</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#object" class="tsd-kind-icon">object</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#oneOf" class="tsd-kind-icon">one<wbr/>Of</a></li><li class="tsd-kind-function"><a href="modules.html#paragraphs" class="tsd-kind-icon">paragraphs</a></li><li class="tsd-kind-function"><a href="modules.html#past" class="tsd-kind-icon">past</a></li><li class="tsd-kind-function"><a href="modules.html#pattern" class="tsd-kind-icon">pattern</a></li><li class="tsd-kind-function"><a href="modules.html#randomator" class="tsd-kind-icon">randomator</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#record" class="tsd-kind-icon">record</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#repeat" class="tsd-kind-icon">repeat</a></li><li class="tsd-kind-function"><a href="modules.html#sentences" class="tsd-kind-icon">sentences</a></li><li class="tsd-kind-function"><a href="modules.html#seq" class="tsd-kind-icon">seq</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#shuffle" class="tsd-kind-icon">shuffle</a></li><li class="tsd-kind-function"><a href="modules.html#strings" class="tsd-kind-icon">strings</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#tuple" class="tsd-kind-icon">tuple</a></li><li class="tsd-kind-function"><a href="modules.html#uint32s" class="tsd-kind-icon">uint32s</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#unique" class="tsd-kind-icon">unique</a></li><li class="tsd-kind-function"><a href="modules.html#unixTimestamp" class="tsd-kind-icon">unix<wbr/>Timestamp</a></li><li class="tsd-kind-function"><a href="modules.html#uuids" class="tsd-kind-icon">uuids</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#weighted" class="tsd-kind-icon">weighted</a></li><li class="tsd-kind-function"><a href="modules.html#words" class="tsd-kind-icon">words</a></li><li class="tsd-kind-function"><a href="modules.html#zalgoify" class="tsd-kind-icon">zalgoify</a></li><li class="tsd-kind-function"><a href="modules.html#zalgos" class="tsd-kind-icon">zalgos</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>
