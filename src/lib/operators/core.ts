@@ -1,5 +1,7 @@
-import { MaybeRandomator, Randomator } from '../randomator';
-import { integers, numbers } from '../generators/numbers';
+import type { MaybeRandomator } from '../randomator.js';
+
+import { Randomator } from '../randomator.js';
+import { integers, numbers } from '../generators/numbers.js';
 
 /**
  * Generates a random value from within the given array

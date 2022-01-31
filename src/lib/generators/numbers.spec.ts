@@ -1,9 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import '../setupJest';
-
-import { bigIntegers, booleans, bytes, floats, int32s, integers, numbers, uint32s } from './numbers';
-import { Randomator } from '../randomator';
+import { bigIntegers, booleans, bytes, floats, int32s, integers, numbers, uint32s } from './numbers.js';
+import { Randomator } from '../randomator.js';
 
 describe('number', () => {
   const n = numbers();

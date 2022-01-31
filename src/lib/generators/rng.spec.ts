@@ -1,6 +1,4 @@
-import '../setupJest';
-
-import { floats, numbers, integers, booleans } from './numbers';
+import { floats, numbers, integers, booleans } from './numbers.js';
 import { cryptoRandom } from '../rng/crypto';
 
 describe('numbers', () => {

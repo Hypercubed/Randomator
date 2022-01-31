@@ -1,8 +1,6 @@
-import '../setupJest';
-
-import { oneOf } from '../operators/core';
-import { integers } from './numbers';
-import { chars, paragraphs, pattern, sentences, strings, uuids, words } from './strings';
+import { oneOf } from '../operators/core.js';
+import { integers } from './numbers.js';
+import { chars, paragraphs, pattern, sentences, strings, uuids, words } from './strings.js';
 
 test('chars', () => {
   const ch = chars();

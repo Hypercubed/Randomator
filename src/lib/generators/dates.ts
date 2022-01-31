@@ -1,8 +1,9 @@
-import { IntegerOptions, integers } from './numbers';
-import { Randomator } from '../randomator';
-import { Rng } from '../rng/types';
-import { checkOptions } from '../utils';
-import { MaxDate, MaxUnixTimestamp, MinDate, MinUnixTimestamp } from './dates.constants';
+import type { Rng } from '../rng/types';
+
+import { IntegerOptions, integers } from './numbers.js';
+import { Randomator } from '../randomator.js';
+import { checkOptions } from '../utils.js';
+import { MaxDate, MaxUnixTimestamp, MinDate, MinUnixTimestamp } from './dates.constants.js';
 
 const now$ = Randomator.from(() => new Date().getTime());
 

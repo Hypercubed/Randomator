@@ -1,6 +1,4 @@
-import '../setupJest';
-
-import { unixTimestamp, dates, future, past } from './dates';
+import { unixTimestamp, dates, future, past } from './dates.js';
 
 test('unix timestamp', () => {
   expect(unixTimestamp()).forMany(v => {

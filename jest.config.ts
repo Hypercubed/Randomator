@@ -1,9 +1,10 @@
-// const crypto = require('@trust/webcrypto');
+import type { Config } from '@jest/types';
 
-module.exports = {
+const config: Config.InitialOptions = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   testPathIgnorePatterns: ['/node_modules/', '/build/'],
+  extensionsToTreatAsEsm: ['.ts'],
   coverageThreshold: {
     global: {
       branches: 50,
@@ -17,5 +18,16 @@ module.exports = {
     "!src/lib/**/index.ts", 
     "!src/lib/setupJest.ts",
   ],
-  setupFilesAfterEnv: ['./jest.setup.js']
+  setupFilesAfterEnv: ['./jest.setup.ts'],
+  globals: {
+    'ts-jest': {
+      useESM: true,
+      tsconfig: 'tsconfig.test.json',
+    }
+  },
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  }
 };
+
+export default config;

@@ -1,8 +1,8 @@
 /* istanbul ignore file */
 
-import { repeat } from '../operators/core';
-import { Randomator } from '../randomator';
-import { integers } from './numbers';
+import { repeat } from '../operators/core.js';
+import { Randomator } from '../randomator.js';
+import { integers } from './numbers.js';
 
 const zalgoChar$ = integers({ min: 0x300, max: 0x36f }).map(String.fromCharCode);
 

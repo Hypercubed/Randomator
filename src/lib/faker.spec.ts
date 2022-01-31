@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import './setupJest';
 
-import { randomator, oneOf } from './operators/core';
-import { paragraphs, sentences, words } from './generators/strings';
-import { Randomator } from './randomator';
+import { randomator, oneOf } from './operators/core.js';
+import { paragraphs, sentences, words } from './generators/strings.js';
+import { Randomator } from './randomator.js';
 
 /* Creating a set of "Name" generators similar to faker.name */
 const name: Record<string, Randomator<string>> = {};

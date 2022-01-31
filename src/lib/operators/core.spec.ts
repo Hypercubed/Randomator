@@ -1,8 +1,6 @@
-import '../setupJest';
-
-import { integers } from '../generators/numbers';
-import { oneOf, randomator, repeat, seq, record, object, array, weighted, shuffle, unique } from './core';
-import { strings } from '../generators/strings';
+import { integers } from '../generators/numbers.js';
+import { oneOf, randomator, repeat, seq, record, object, array, weighted, shuffle, unique } from './core.js';
+import { strings } from '../generators/strings.js';
 
 test('oneOf', () => {
   const ab = oneOf(['a', 'b']);

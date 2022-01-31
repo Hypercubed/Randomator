@@ -1,5 +1,6 @@
-import { Randomator } from './randomator';
 import { enumerate, itake, izip } from 'itertools';
+
+import { Randomator } from './randomator.js';
 
 describe('works with itertools', () => {
   const ab = Randomator.from(() => (Math.random() < 0.5 ? 'a' : 'b'));

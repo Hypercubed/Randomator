@@ -1,7 +1,8 @@
-import { Randomator } from '../randomator';
-import { Rng } from '../rng/types';
-import { checkOptions } from '../utils';
-import { UINT32_SIZE } from './numbers.constants';
+import type { Rng } from '../rng/types';
+
+import { Randomator } from '../randomator.js';
+import { checkOptions } from '../utils.js';
+import { UINT32_SIZE } from './numbers.constants.js';
 
 export interface NumberOptions {
   rng?: Rng;

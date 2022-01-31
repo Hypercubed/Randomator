@@ -1,8 +1,8 @@
-import { oneOf, repeat, seq } from '../operators/core';
-import { integers } from './numbers';
-import { MaybeRandomator, Randomator } from '../randomator';
-import { capitalize, checkOptions } from '../utils';
-import { ALPHA, ALPHANUM, CHARS, HEX_CHARS, LCASE, PUNCTUATION, UCASE } from './strings.constants';
+import { oneOf, repeat, seq } from '../operators/core.js';
+import { integers } from './numbers.js';
+import { MaybeRandomator, Randomator } from '../randomator.js';
+import { capitalize, checkOptions } from '../utils.js';
+import { ALPHA, ALPHANUM, CHARS, HEX_CHARS, LCASE, PUNCTUATION, UCASE } from './strings.constants.js';
 
 //TODO: rng
 interface CharOptions {

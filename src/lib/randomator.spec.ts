@@ -1,6 +1,4 @@
-import './setupJest';
-
-import { Randomator } from './randomator';
+import { Randomator } from './randomator.js';
 
 const a = Randomator.from('a');
 const ab = Randomator.from(() => (Math.random() < 0.5 ? 'a' : 'b'));
