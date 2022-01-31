@@ -30,7 +30,7 @@
     "check": "run-s test:lint test:prettier",
     "coverage": "jest --coverage",
     "audit": "run-s audit:*",
-    "audit:npm": "npm audit",
+    "audit:npm": "npm audit --production",
     "audit:npm-check": "npm-check --skip-unused || true",
     "npm-update": "npm-check --skip-unused -u",
     "docs": "run-s docs:*",
