@@ -2,14 +2,17 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
+_(none)_
+
+---
+
+## 3.0.0-0 (2022-02-04)
 
 * use plural for Randomators creators to avoid confusion with types
 * adds unixTimestamp
 * more reasonable range for random dates
 * `.value` is now `.next`
 * `.next` is automatically bound to the Randomator (replaces `.$`)
-
----
 
 ## 2.0.0 (2022-01-15)
 
