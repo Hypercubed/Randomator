@@ -90,16 +90,16 @@ expect.extend({
     const S = Array.from({ length: N_χ }, () => generator.next());
 
     // obtain mutually exclusive classes, if not defined
-    categories ??= [...new Set(S)];
+    categories = categories || [...new Set(S)];
 
     // calculate expected frequency for each class assuming equal distribution, if not defined
-    expectations ??= categories.map(() => 1 / categories.length);
+    expectations = expectations || categories.map(() => 1 / categories.length);
 
     // convert frequencies to expected values
     const E = expectations.map(ei => ei * N_χ);
 
     // assume degrees of freedom, if not defined
-    df ??= categories.length - 1;
+    df = df || categories.length - 1;
 
     const O = categories.map(ki => S.filter(si => si === ki).length);
 
