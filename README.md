@@ -113,7 +113,7 @@ integers({ min: 5, max: 12 })();  // [5,12]
 
 ```js
 chars()();  // returns a random character (one of `abcdefghijklmnopqrstuvwxyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()`).
-chars('!@#$')();  // returns a random character from the set '!@#$'
+chars({ pool: '!@#$' })();  // returns a random character from the set '!@#$'
 ```
 
 #### `strings`
