@@ -4,14 +4,14 @@ import { bigIntegers, booleans, bytes, floats, int32s, integers, numbers, uint32
 import { Randomator } from '../randomator.js';
 
 describe('number', () => {
-  const n = numbers();
+  const n$ = numbers();
 
   test('is a Randomator', () => {
-    expect(n).toBeInstanceOf(Randomator);
+    expect(n$).toBeInstanceOf(Randomator);
   });
 
   test('value tests', () => {
-    expect(n).forMany(v => {
+    expect(n$).forMany(v => {
       expect(typeof v).toBe('number');
       expect(v).toBeGreaterThanOrEqual(0);
       expect(v).toBeLessThan(1);
@@ -19,7 +19,7 @@ describe('number', () => {
   });
 
   test('bound tests', () => {
-    const fn = n.bind(null);
+    const fn = n$.bind(null);
     Array.from({ length: 100 }, fn).forEach(v => {
       expect(typeof v).toBe('number');
       expect(v).toBeGreaterThanOrEqual(0);
@@ -28,13 +28,13 @@ describe('number', () => {
   });
 
   test('chi-squared tests', () => {
-    expect(n.map(x => x < 0.5)).toPassFreqTest();
-    expect(n.map(x => x < 0.55)).toPassFreqTest([true, false], [55 / 100, 1 - 55 / 100]);
-    expect(n.map(x => x < 0.25)).toPassFreqTest([true, false], [1 / 4, 3 / 4]);
+    expect(n$.map(x => x < 0.5)).toPassFreqTest();
+    expect(n$.map(x => x < 0.55)).toPassFreqTest([true, false], [55 / 100, 1 - 55 / 100]);
+    expect(n$.map(x => x < 0.25)).toPassFreqTest([true, false], [1 / 4, 3 / 4]);
   });
 
   test('Wald–Wolfowitz runs test', () => {
-    expect(n).toPassRunsTest();
+    expect(n$).toPassRunsTest();
   });
 
   test('throws on bad options', () => {
@@ -46,81 +46,81 @@ describe('number', () => {
 
 describe('float', () => {
   test('default', () => {
-    const zeroToOne = floats();
-    expect(zeroToOne).toBeInstanceOf(Randomator);
+    const zeroToOne$ = floats();
+    expect(zeroToOne$).toBeInstanceOf(Randomator);
 
-    expect(zeroToOne).forMany(v => {
+    expect(zeroToOne$).forMany(v => {
       expect(typeof v).toBe('number');
       expect(v).toBeGreaterThanOrEqual(0);
       expect(v).toBeLessThanOrEqual(1);
     });
 
-    expect(zeroToOne.map(x => x < 0.5)).toPassFreqTest([true, false]);
-    expect(zeroToOne.map(x => x < 0.25)).toPassFreqTest([true, false], [1 / 4, 3 / 4]);
+    expect(zeroToOne$.map(x => x < 0.5)).toPassFreqTest([true, false]);
+    expect(zeroToOne$.map(x => x < 0.25)).toPassFreqTest([true, false], [1 / 4, 3 / 4]);
 
-    const fiveToTen = floats({ min: 5, max: 10, fixed: 0 });
-    expect(fiveToTen).forMany(v => {
+    const fiveToTen$ = floats({ min: 5, max: 10, fixed: 0 });
+    expect(fiveToTen$).forMany(v => {
       expect(typeof v).toBe('number');
       expect(v).toBeGreaterThanOrEqual(5);
       expect(v).toBeLessThanOrEqual(10);
     });
-    expect(fiveToTen).toPassFreqTest([5, 6, 7, 8, 9, 10]);
+    expect(fiveToTen$).toPassFreqTest([5, 6, 7, 8, 9, 10]);
   });
 
   test('max', () => {
-    const zeroToTen = floats({ max: 10 });
-    expect(zeroToTen).forMany(v => {
+    const zeroToTen$ = floats({ max: 10 });
+    expect(zeroToTen$).forMany(v => {
       expect(typeof v).toBe('number');
       expect(v).toBeGreaterThanOrEqual(0);
       expect(v).toBeLessThan(10);
     });
-    expect(zeroToTen.map(x => x < 8)).toPassFreqTest([true, false], [8 / 10, 2 / 10]);
-    expect(zeroToTen).toPassRunsTest();
+    expect(zeroToTen$.map(x => x < 8)).toPassFreqTest([true, false], [8 / 10, 2 / 10]);
+    expect(zeroToTen$).toPassRunsTest();
   });
 
   test('large values', () => {
-    const large = floats({ max: 1e6, min: -1e6, fixed: 2 });
-    expect(large).forMany(v => {
+    const large$ = floats({ max: 1e6, min: -1e6, fixed: 2 });
+    expect(large$).forMany(v => {
       expect(v).toBeGreaterThanOrEqual(-1e6);
       expect(v).toBeLessThan(1e6);
 
       const decimals = v.toString().split('.')[1] || '';
       expect(decimals.length).toBeLessThanOrEqual(2);
     });
-    expect(large).toPassRunsTest();
+    expect(large$).toPassRunsTest();
   });
 });
 
 describe('integers', () => {
   test('integer', () => {
-    const zeroToNine = integers();
-    expect(zeroToNine).toBeInstanceOf(Randomator);
+    const zeroToNine$ = integers();
+    expect(zeroToNine$).toBeInstanceOf(Randomator);
 
-    expect(zeroToNine).forMany(v => {
+    expect(zeroToNine$).forMany(v => {
       expect(typeof v).toBe('number');
       expect(v).toBe(~~v);
       expect(v).toBeGreaterThanOrEqual(0);
       expect(v).toBeLessThanOrEqual(9);
     });
 
-    expect(zeroToNine).toPassFreqTest([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
-    expect(zeroToNine).toPassRunsTest();
+    expect(zeroToNine$).toPassFreqTest([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    expect(zeroToNine$).toPassRunsTest();
 
-    const zeroToTen = integers({ max: 10 });
-    expect(zeroToTen).forMany(v => {
+    const zeroToTen$ = integers({ max: 10 });
+    expect(zeroToTen$).forMany(v => {
       expect(v).toBeGreaterThanOrEqual(0);
       expect(v).toBeLessThanOrEqual(10);
     });
 
-    expect(zeroToTen).toPassFreqTest([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    expect(zeroToTen$).toPassFreqTest([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
-    const fiveToTen = integers({ max: 10, min: 5 });
-    expect(fiveToTen).forMany(v => {
+    const fiveToTen$ = integers({ max: 10, min: 5 });
+    expect(fiveToTen$).forMany(v => {
       expect(v).toBeGreaterThanOrEqual(5);
       expect(v).toBeLessThanOrEqual(10);
     });
-    expect(fiveToTen).toPassFreqTest([5, 6, 7, 8, 9, 10]);
-    expect(fiveToTen).toPassRunsTest();
+    expect(fiveToTen$).toPassFreqTest([5, 6, 7, 8, 9, 10]);
+    expect(fiveToTen$).toPassRunsTest();
   });
 
   test('throws on bad options', () => {
@@ -140,34 +140,34 @@ describe('integers', () => {
 
 describe('big integers', () => {
   test('big integer', () => {
-    const zeroToNine = bigIntegers();
-    expect(zeroToNine).toBeInstanceOf(Randomator);
+    const zeroToNine$ = bigIntegers();
+    expect(zeroToNine$).toBeInstanceOf(Randomator);
 
-    expect(zeroToNine).forMany(v => {
+    expect(zeroToNine$).forMany(v => {
       expect(typeof v).toBe('bigint');
       expect(v).toBe(~~v);
       expect(v).toBeGreaterThanOrEqual(0);
       expect(v).toBeLessThanOrEqual(9);
     });
 
-    expect(zeroToNine).toPassFreqTest([0n, 1n, 2n, 3n, 4n, 5n, 6n, 7n, 8n, 9n]);
-    expect(zeroToNine).toPassRunsTest();
+    expect(zeroToNine$).toPassFreqTest([0n, 1n, 2n, 3n, 4n, 5n, 6n, 7n, 8n, 9n]);
+    expect(zeroToNine$).toPassRunsTest();
 
-    const zeroToTen = bigIntegers({ max: 10n });
-    expect(zeroToTen).forMany(v => {
+    const zeroToTen$ = bigIntegers({ max: 10n });
+    expect(zeroToTen$).forMany(v => {
       expect(v).toBeGreaterThanOrEqual(0n);
       expect(v).toBeLessThanOrEqual(10n);
     });
 
-    expect(zeroToTen).toPassFreqTest([0n, 1n, 2n, 3n, 4n, 5n, 6n, 7n, 8n, 9n, 10n]);
+    expect(zeroToTen$).toPassFreqTest([0n, 1n, 2n, 3n, 4n, 5n, 6n, 7n, 8n, 9n, 10n]);
 
-    const fiveToTen = bigIntegers({ max: 10n, min: 5n });
-    expect(fiveToTen).forMany(v => {
+    const fiveToTen$ = bigIntegers({ max: 10n, min: 5n });
+    expect(fiveToTen$).forMany(v => {
       expect(v).toBeGreaterThanOrEqual(5n);
       expect(v).toBeLessThanOrEqual(10n);
     });
     // expect(fiveToTen).toPassFreqTest([5n, 6n, 7n, 8n, 9n, 10n]);
-    expect(fiveToTen).toPassRunsTest();
+    expect(fiveToTen$).toPassRunsTest();
 
     const MAX_SAFE_INTEGER = BigInt(Number.MAX_SAFE_INTEGER);
     const large = bigIntegers({ min: -2n * MAX_SAFE_INTEGER, max: 2n * MAX_SAFE_INTEGER });

@@ -90,7 +90,7 @@ const ALPHA = 0.0001;
 expect.extend({
   toPassFreqTest(randomator: Randomator, categories?: unknown[], expectations?: number[], df?: number) {
     // generate N_χ observations
-    const S = Array.from({ length: N_χ }, () => randomator());
+    const S = randomator.toArray(N_χ);
 
     // obtain mutually exclusive classes, if not defined
     categories = categories || [...new Set(S)];

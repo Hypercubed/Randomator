@@ -1,44 +1,79 @@
 import { Randomator } from './randomator.js';
 
-const a = Randomator.from('a');
-const ab = Randomator.from(() => (Math.random() < 0.5 ? 'a' : 'b'));
-const inner = Randomator.from(() => a);
-const outer = Randomator.from(() => inner);
+// const a$ = Randomator.from('a');
+const ab$ = Randomator.from(() => (Math.random() < 0.5 ? 'a' : 'b'));
 
 describe('Randomator', () => {
   test('is a Randomator', () => {
-    expect(ab).toBeInstanceOf(Randomator);
+    expect(ab$).toBeInstanceOf(Randomator);
+  });
+
+  test('unwrap', () => {
+    const inner$ = Randomator.from(() => ab$);
+    const outer$ = Randomator.from(() => inner$);
+
+    for (let i = 0; i < 30; i++) {
+      expect(Randomator.unwrap(outer$)).toMatch(/[ab]/);
+      expect(Randomator.unwrap('test')).toBe('test');
+    }
+  });
+
+  test('species', () => {
+    expect(Randomator[Symbol.species]).toBe(Randomator);
   });
 
   test('is a callable function', () => {
-    expect(typeof ab).toBe('function');
-    expect(ab).toBeInstanceOf(Function);
-    expect(ab()).toMatch(/[ab]/);
+    expect(typeof ab$).toBe('function');
+    expect(ab$).toBeInstanceOf(Function);
 
-    expect(ab.bind(null)()).toMatch(/[ab]/);
-    expect(ab.call(null)).toMatch(/[ab]/);
-    expect(ab.apply(null)).toMatch(/[ab]/);
+    for (let i = 0; i < 30; i++) {
+      expect(ab$()).toMatch(/[ab]/);
+      expect(ab$.bind(null)()).toMatch(/[ab]/);
+      expect(ab$.call(null)).toMatch(/[ab]/);
+      expect(ab$.apply(null)).toMatch(/[ab]/);
+    }
+
+    expect(ab$).toPassFreqTest(['a', 'b']);
+  });
+
+  test('iterable', () => {
+    let c = 0;
+    for (const value of ab$) {
+      expect(value).toMatch(/[ab]/);
+      c++;
+      if (c > 10) break;
+    }
+
+    const it = ab$[Symbol.iterator]();
+    Array.from({ length: 100 }).forEach(() => {
+      expect(it.next().value).toMatch(/[ab]/);
+      expect(it.next().done).toBe(false);
+    });
   });
 
   test('#next', () => {
-    expect(ab.next()).toMatch(/[ab]/);
-    expect(ab).toPassFreqTest(['a', 'b']);
+    expect(ab$.next()).toMatch(/[ab]/);
   });
 
   test('#map', () => {
-    const r = ab.map(_ => _ + _);
+    const r = ab$.map(_ => _ + _.toUpperCase());
     expect(r).toBeInstanceOf(Randomator);
     expect(typeof r).toBe('function');
-    expect(r()).toMatch(/[ab][ab]/);
+    expect(r).forMany(v => {
+      expect(v).toMatch(/aA|bB/);
+    });
   });
 
-  test('#invoke', () => {
-    const r = ab.invoke(_ => _ + _);
-    expect(r).toMatch(/[ab][ab]/);
+  test('#chain', () => {
+    for (let i = 0; i < 30; i++) {
+      const r = ab$.chain(_ => _ + _.toUpperCase());
+      expect(typeof r).toBe('string');
+      expect(r).toMatch(/aA|bB/);
+    }
   });
 
   test('#filter', () => {
-    const r = ab.filter(_ => _ !== 'a');
+    const r = ab$.filter(_ => _ !== 'a');
     expect(r).toBeInstanceOf(Randomator);
     expect(typeof r).toBe('function');
     expect(r).forMany(v => {
@@ -46,38 +81,14 @@ describe('Randomator', () => {
     });
   });
 
-  test('unwrap', () => {
-    expect(Randomator.unwrap(outer)).toBe('a');
-    expect(Randomator.unwrap('test')).toBe('test');
-  });
-
-  test('species', () => {
-    expect(Randomator[Symbol.species]).toBe(Randomator);
-  });
-
   test('#pipe', () => {
-    const r = ab.pipe(_ => _() + _());
+    const r = ab$.pipe(_ => _() + _());
     expect(r).toBeInstanceOf(Randomator);
     expect(r).toPassFreqTest(['aa', 'bb', 'ab', 'ba']);
   });
 
-  test('iterable', () => {
-    let c = 0;
-    for (const value of ab) {
-      expect(value).toMatch(/[ab]/);
-      c++;
-      if (c > 10) break;
-    }
-
-    const it = ab[Symbol.iterator]();
-    Array.from({ length: 100 }).forEach(() => {
-      expect(it.next().value).toMatch(/[ab]/);
-      expect(it.next().done).toBe(false);
-    });
-  });
-
   test('#toArray', () => {
-    ab.toArray(100).forEach(v => {
+    ab$.toArray(100).forEach(v => {
       expect(v).toMatch(/[ab]/);
     });
   });

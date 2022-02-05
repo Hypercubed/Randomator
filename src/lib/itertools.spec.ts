@@ -3,11 +3,11 @@ import { enumerate, itake, izip } from 'itertools';
 import { Randomator } from './randomator.js';
 
 describe('works with itertools', () => {
-  const ab = Randomator.from(() => (Math.random() < 0.5 ? 'a' : 'b'));
-  const cd = Randomator.from(() => (Math.random() < 0.66 ? 'c' : 'd'));
+  const ab$ = Randomator.from(() => (Math.random() < 0.5 ? 'a' : 'b'));
+  const cd$ = Randomator.from(() => (Math.random() < 0.66 ? 'c' : 'd'));
 
   test('take', () => {
-    const a = Array.from(itake(5, ab));
+    const a = Array.from(itake(5, ab$));
 
     expect(a).toHaveLength(5);
 
@@ -17,7 +17,7 @@ describe('works with itertools', () => {
   });
 
   test('izip', () => {
-    const z = izip(ab, cd);
+    const z = izip(ab$, cd$);
     const a = Array.from(itake(5, z));
 
     expect(a).toHaveLength(5);
@@ -29,7 +29,7 @@ describe('works with itertools', () => {
   });
 
   test('enumerate', () => {
-    const f = itake(5, ab);
+    const f = itake(5, ab$);
     const a = Array.from(enumerate(f));
 
     expect(a).toHaveLength(5);

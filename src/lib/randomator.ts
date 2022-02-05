@@ -58,12 +58,12 @@ export class Randomator<T = unknown> extends Function implements Iterable<T> {
   }
 
   /**
-   * invoke
+   * chain
    *
    * @param mapper
    * @returns
    */
-  invoke<U>(mapper: (_: T) => MaybeRandomator<U>): U {
+  chain<U>(mapper: (_: T) => MaybeRandomator<U>): U {
     return Randomator.unwrap(mapper.call(this, this()));
   }
 

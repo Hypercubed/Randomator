@@ -40,9 +40,11 @@ export function weighted<T>(arr: MaybeRandomator<T>[], weights: number[]): Rando
  * @returns
  */
 export function shuffle<T>(arr: MaybeRandomator<T>[]): Randomator<T[]> {
+  const a = arr.slice();
+  let l = a.length;
+
   return new Randomator<T[]>(() => {
-    const a = arr.slice();
-    let l = a.length;
+    l = a.length;
     while (l) {
       const idx = Math.floor(Math.random() * l--);
       const t = a[l];
