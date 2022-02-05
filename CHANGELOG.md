@@ -2,11 +2,14 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
+_(none)_
+
+---
+
+## 3.0.0-1 (2022-02-05)
 
 * Randomator instances are now functions
 * `.next/.value` is now `()`
-
----
 
 ## 3.0.0-0 (2022-02-04)
 

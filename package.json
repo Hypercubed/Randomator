@@ -1,7 +1,7 @@
 {
   "name": "randomator",
   "private": false,
-  "version": "3.0.0-0",
+  "version": "3.0.0-1",
   "description": "composable random generators",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
