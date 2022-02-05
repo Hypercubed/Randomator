@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import * as chi from 'chi-squared';
 import { Normal } from 'distributions';
 import { Randomator } from './src/';

@@ -32,8 +32,8 @@ describe('Randomator', () => {
     expect(r()).toMatch(/[ab][ab]/);
   });
 
-  test('#nmap', () => {
-    const r = ab.nmap(_ => _ + _);
+  test('#invoke', () => {
+    const r = ab.invoke(_ => _ + _);
     expect(r).toMatch(/[ab][ab]/);
   });
 

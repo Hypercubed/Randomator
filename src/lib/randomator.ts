@@ -1,17 +1,10 @@
 export type MaybeRandomator<T = unknown> = T | Randomator<MaybeRandomator<T>>;
 export type GenerateFunction<T> = () => T;
 
-class ExtensibleFunction<T = unknown> extends Function {
-  constructor(f: GenerateFunction<T>) {
-    super();
-    return Object.setPrototypeOf(f, new.target.prototype);
-  }
-}
-
 /**
  * Randomator class
  */
-export class Randomator<T = unknown> extends ExtensibleFunction implements Iterable<T> {
+export class Randomator<T = unknown> extends Function implements Iterable<T> {
   static from<U>(x: U | Randomator<U> | GenerateFunction<U>): Randomator<U> {
     if (x instanceof Randomator) {
       return x;
@@ -33,10 +26,10 @@ export class Randomator<T = unknown> extends ExtensibleFunction implements Itera
     return this;
   }
 
-  constructor(private readonly generate: GenerateFunction<T>) {
-    super(() => {
-      return Randomator.unwrap(this.generate());
-    });
+  constructor(generate: GenerateFunction<T>) {
+    super();
+    const call = () => Randomator.unwrap(generate());
+    return Object.setPrototypeOf(call, new.target.prototype);
   }
 
   *[Symbol.iterator](): Iterator<T> {
@@ -50,9 +43,9 @@ export class Randomator<T = unknown> extends ExtensibleFunction implements Itera
    *
    * @returns
    */
-  next = (): T => {
+  next(): T {
     return this();
-  };
+  }
 
   /**
    * Maps random values
@@ -65,15 +58,21 @@ export class Randomator<T = unknown> extends ExtensibleFunction implements Itera
   }
 
   /**
-   * apply
+   * invoke
    *
    * @param mapper
    * @returns
    */
-  nmap<U>(mapper: (_: T) => MaybeRandomator<U>): U {
+  invoke<U>(mapper: (_: T) => MaybeRandomator<U>): U {
     return Randomator.unwrap(mapper.call(this, this()));
   }
 
+  /**
+   * pipe
+   *
+   * @param mapper
+   * @returns
+   */
   pipe<U>(mapper: (_: this) => MaybeRandomator<U>): Randomator<U> {
     return new Randomator(() => mapper.call(this, this));
   }
@@ -94,6 +93,12 @@ export class Randomator<T = unknown> extends ExtensibleFunction implements Itera
     });
   }
 
+  /**
+   * toArray
+   *
+   * @param length - length of the resulting array
+   * @returns
+   */
   toArray(length: number): Array<T> {
     return Array.from({ length }, () => this());
   }

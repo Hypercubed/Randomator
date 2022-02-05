@@ -48,8 +48,9 @@ export function uuids(version: MaybeRandomator<number> = integers({ min: 1, max:
   return Randomator.from(version).map(v => pattern(`xxxxxxxx-xxxx-${v}xxx-yxxx-xxxxxxxxxxxx`));
 }
 
-export const ipv6s = () => pattern('xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx');
-export const macs = () => pattern('XX:XX:XX:XX:XX:XX');
+// TODO: test
+// export const ipv6s = () => pattern('xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx');
+// export const macs = () => pattern('XX:XX:XX:XX:XX:XX');
 
 export const phoneNumbers = () =>
   oneOf([
