@@ -23,6 +23,7 @@ const config: Config.InitialOptions = {
     'ts-jest': {
       useESM: true,
       tsconfig: 'tsconfig.test.json',
+      diagnostics: false
     }
   },
   moduleNameMapper: {

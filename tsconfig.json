@@ -20,7 +20,7 @@
     "listFiles": false /* Print names of files part of the compilation. */,
     "pretty": true /* Stylize errors and messages using color and context. */,
     "lib": ["es2017", "dom"],
-    "types": ["jest", "node"],
+    "types": ["node"],
     "typeRoots": ["node_modules/@types", "src/types"]
   },
   "include": ["src/**/*.ts"],
