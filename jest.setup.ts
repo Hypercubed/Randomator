@@ -9,7 +9,7 @@ declare global {
     interface Matchers<R> {
       toPassFreqTest(categories?: unknown[], expectations?: number[], dof?: number, N?: number): R;
       toPassRunsTest(): R;
-      forMany(fn: (v: unknown) => void): R;
+      forMany(fn: (v: unknown | unknown[]) => void): R;
     }
   }
 }
@@ -93,12 +93,12 @@ function zTestPValue(observations: unknown[], categories: unknown[]) {
 
 const N_χ = 10000;
 const N_z = 30;
-const ALPHA = process.env.CI ? 0.0001 : 0.001;
+const ALPHA = 0.0001;
 
 expect.extend({
-  toPassFreqTest(generator: Randomator, categories?: unknown[], expectations?: number[], df?: number) {
+  toPassFreqTest(randomator: Randomator, categories?: unknown[], expectations?: number[], df?: number) {
     // generate N_χ observations
-    const S = Array.from({ length: N_χ }, () => generator.next());
+    const S = Array.from({ length: N_χ }, () => randomator());
 
     // obtain mutually exclusive classes, if not defined
     categories = categories || [...new Set(S)];

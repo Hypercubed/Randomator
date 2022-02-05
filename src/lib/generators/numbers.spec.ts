@@ -19,7 +19,7 @@ describe('number', () => {
   });
 
   test('bound tests', () => {
-    const fn = n.next;
+    const fn = n.bind(null);
     Array.from({ length: 100 }, fn).forEach(v => {
       expect(typeof v).toBe('number');
       expect(v).toBeGreaterThanOrEqual(0);
@@ -180,7 +180,7 @@ describe('booleans', () => {
   test('boolean', () => {
     const b = booleans();
     expect(b).toBeInstanceOf(Randomator);
-    expect(typeof b.next()).toBe('boolean');
+    expect(typeof b()).toBe('boolean');
 
     expect(b).toPassFreqTest([true, false]);
     expect(b).toPassRunsTest();

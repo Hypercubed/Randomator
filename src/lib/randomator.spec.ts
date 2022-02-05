@@ -6,6 +6,20 @@ const inner = Randomator.from(() => a);
 const outer = Randomator.from(() => inner);
 
 describe('Randomator', () => {
+  test('is a Randomator', () => {
+    expect(ab).toBeInstanceOf(Randomator);
+  });
+
+  test('is a callable function', () => {
+    expect(typeof ab).toBe('function');
+    expect(ab).toBeInstanceOf(Function);
+    expect(ab()).toMatch(/[ab]/);
+
+    expect(ab.bind(null)()).toMatch(/[ab]/);
+    expect(ab.call(null)).toMatch(/[ab]/);
+    expect(ab.apply(null)).toMatch(/[ab]/);
+  });
+
   test('#next', () => {
     expect(ab.next()).toMatch(/[ab]/);
     expect(ab).toPassFreqTest(['a', 'b']);
@@ -14,17 +28,19 @@ describe('Randomator', () => {
   test('#map', () => {
     const r = ab.map(_ => _ + _);
     expect(r).toBeInstanceOf(Randomator);
-    expect(r.next()).toMatch(/[ab][ab]/);
+    expect(typeof r).toBe('function');
+    expect(r()).toMatch(/[ab][ab]/);
   });
 
-  test('#apply', () => {
-    const r = ab.apply(_ => _ + _);
+  test('#nmap', () => {
+    const r = ab.nmap(_ => _ + _);
     expect(r).toMatch(/[ab][ab]/);
   });
 
   test('#filter', () => {
     const r = ab.filter(_ => _ !== 'a');
     expect(r).toBeInstanceOf(Randomator);
+    expect(typeof r).toBe('function');
     expect(r).forMany(v => {
       expect(v).toBe('b');
     });
@@ -40,7 +56,7 @@ describe('Randomator', () => {
   });
 
   test('#pipe', () => {
-    const r = ab.pipe(_ => _.next() + _.next());
+    const r = ab.pipe(_ => _() + _());
     expect(r).toBeInstanceOf(Randomator);
     expect(r).toPassFreqTest(['aa', 'bb', 'ab', 'ba']);
   });

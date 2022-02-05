@@ -3,8 +3,8 @@ import { chars, paragraphs, sentences, strings, words } from './strings.js';
 
 test('chars', () => {
   const ch = chars();
-  expect(typeof ch.next()).toBe('string');
-  expect(ch.next()).toHaveLength(1);
+  expect(typeof ch()).toBe('string');
+  expect(ch()).toHaveLength(1);
 
   expect(ch).forMany(v => {
     expect(v).toHaveLength(1);
