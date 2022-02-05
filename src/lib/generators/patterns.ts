@@ -1,8 +1,8 @@
-import { oneOf, seq } from "../operators";
-import { MaybeRandomator, Randomator } from "../randomator";
-import { integers } from "./numbers";
-import { chars } from "./strings";
-import { ALPHA, ALPHANUM, HEX_CHARS, LCASE, UCASE } from "./strings.constants";
+import { oneOf, seq } from '../operators';
+import { MaybeRandomator, Randomator } from '../randomator';
+import { integers } from './numbers';
+import { chars } from './strings';
+import { ALPHA, ALPHANUM, HEX_CHARS, LCASE, UCASE } from './strings.constants';
 
 /**
  * Generates a random string using a pattern
@@ -11,7 +11,7 @@ import { ALPHA, ALPHANUM, HEX_CHARS, LCASE, UCASE } from "./strings.constants";
  * @param mapper
  * @returns
  */
- export function pattern(pat: string, mapper: Record<string, MaybeRandomator> = MAP): Randomator<string> {
+export function pattern(pat: string, mapper: Record<string, MaybeRandomator> = MAP): Randomator<string> {
   const arr: MaybeRandomator[] = pat.split('').map(c => {
     return mapper[c] || c;
   });
@@ -51,11 +51,12 @@ export function uuids(version: MaybeRandomator<number> = integers({ min: 1, max:
 export const ipv6s = () => pattern('xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx');
 export const macs = () => pattern('XX:XX:XX:XX:XX:XX');
 
-export const phoneNumbers = () => oneOf([
-  pattern('!##-!##-####'),
-  pattern('(!##) !##-####'),
-  pattern('1-!##-!##-####'),
-  pattern('!##-!##-#### ####'),
-  pattern('(!##) !##-#### ####'),
-  pattern('1-!##-!##-#### ####')
-]);
+export const phoneNumbers = () =>
+  oneOf([
+    pattern('!##-!##-####'),
+    pattern('(!##) !##-####'),
+    pattern('1-!##-!##-####'),
+    pattern('!##-!##-#### ####'),
+    pattern('(!##) !##-#### ####'),
+    pattern('1-!##-!##-#### ####')
+  ]);

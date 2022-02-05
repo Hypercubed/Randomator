@@ -76,5 +76,3 @@ test('paragraph', () => {
     expect(v).toMatch(/^([A-Z][a-zA-Z ]+[a-zA-Z][.?!,;:] ?){3,7}$/);
   });
 });
-
-

@@ -2,7 +2,7 @@ import { oneOf, repeat, seq } from '../operators/core.js';
 import { integers } from './numbers.js';
 import { MaybeRandomator, Randomator } from '../randomator.js';
 import { capitalize, checkOptions } from '../utils.js';
-import {  CHARS, LCASE, PUNCTUATION } from './strings.constants.js';
+import { CHARS, LCASE, PUNCTUATION } from './strings.constants.js';
 
 //TODO: rng
 interface CharOptions {

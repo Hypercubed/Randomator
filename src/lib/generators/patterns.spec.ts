@@ -1,4 +1,4 @@
-import { pattern, uuids, phoneNumbers } from "./patterns";
+import { pattern, uuids, phoneNumbers } from './patterns';
 
 test('pattern', () => {
   expect(pattern('___-^^^-###')).forMany(v => {
