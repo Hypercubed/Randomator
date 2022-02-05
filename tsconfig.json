@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "rootDir": "src",
+    "rootDir": ".",
     "incremental": true,
     "target": "es2020",
     "moduleResolution": "node",
@@ -23,7 +23,7 @@
     "typeRoots": ["node_modules/@types", "src/types"],
     "noEmit": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "*.ts"],
   "exclude": ["node_modules/**"],
   "compileOnSave": false
 }
