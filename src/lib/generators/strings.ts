@@ -2,7 +2,7 @@ import { oneOf, repeat, seq } from '../operators/core.js';
 import { integers } from './numbers.js';
 import { MaybeRandomator, Randomator } from '../randomator.js';
 import { capitalize, checkOptions } from '../utils.js';
-import { ALPHA, ALPHANUM, CHARS, HEX_CHARS, LCASE, PUNCTUATION, UCASE } from './strings.constants.js';
+import {  CHARS, LCASE, PUNCTUATION } from './strings.constants.js';
 
 //TODO: rng
 interface CharOptions {
@@ -93,46 +93,4 @@ export function paragraphs(options: ParagraphOptions = {}): Randomator<string> {
   checkOptions(['sentences', 'length'], options);
   const { sentences: sentence$ = sentences(), length = integers({ min: 3, max: 7 }) } = options;
   return Randomator.from(length).map((l: number) => repeat(sentence$, l, { separator: ' ' }));
-}
-
-/**
- * Generates a random string using a pattern
- *
- * @param pat
- * @param mapper
- * @returns
- */
-export function pattern(pat: string, mapper: Record<string, MaybeRandomator> = MAP): Randomator<string> {
-  const arr: MaybeRandomator[] = pat.split('').map(c => {
-    return mapper[c] || c;
-  });
-  return seq(arr);
-}
-
-const lcase = chars({ pool: LCASE });
-const ucase = chars({ pool: UCASE });
-const hexa = chars({ pool: HEX_CHARS });
-
-const MAP = {
-  _: lcase, // a random lower case letter
-  a: lcase, // a random lower case letter
-  x: hexa, // a random hexadecimal character
-  y: chars({ pool: '89ab' }), // a random character from the set 89ab
-  '^': ucase, // a random upper case letter
-  A: ucase, // a random upper case letter
-  '0': integers(), // a random digit
-  '#': integers(), // a random digit
-  '!': integers({ max: 9, min: 1 }), // a random digit excluding 0
-  '?': chars({ pool: ALPHA }), // a random alpha character
-  '*': chars({ pool: ALPHANUM }) // a random alphanumeric character
-};
-
-/**
- * Generates a random uuid
- *
- * @param version
- * @returns
- */
-export function uuids(version: MaybeRandomator<number> = integers({ min: 1, max: 5 })): Randomator<string> {
-  return Randomator.from(version).map(v => pattern(`xxxxxxxx-xxxx-${v}xxx-yxxx-xxxxxxxxxxxx`));
 }

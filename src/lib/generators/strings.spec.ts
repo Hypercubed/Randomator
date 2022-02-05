@@ -1,6 +1,5 @@
-import { oneOf } from '../operators/core.js';
 import { integers } from './numbers.js';
-import { chars, paragraphs, pattern, sentences, strings, uuids, words } from './strings.js';
+import { chars, paragraphs, sentences, strings, words } from './strings.js';
 
 test('chars', () => {
   const ch = chars();
@@ -78,33 +77,4 @@ test('paragraph', () => {
   });
 });
 
-test('pattern', () => {
-  expect(pattern('___-^^^-###')).forMany(v => {
-    expect(typeof v).toBe('string');
-    expect(v).toMatch(/^[a-z]{3}-[A-Z]{3}-[0-9]{3}$/);
-  });
 
-  const phoneNumber = oneOf([
-    pattern('!##-!##-####'),
-    pattern('(!##) !##-####'),
-    pattern('1-!##-!##-####'),
-    pattern('!##-!##-#### ####'),
-    pattern('(!##) !##-#### ####'),
-    pattern('1-!##-!##-#### ####')
-  ]);
-
-  expect(phoneNumber).forMany(v => {
-    expect(v).toMatch(/^[()0-9- ]+$/);
-  });
-});
-
-test('uuid', () => {
-  expect(uuids()).forMany(v => {
-    expect(typeof v).toBe('string');
-    expect(v).toMatch(/^[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/);
-  });
-
-  expect(uuids(3)).forMany(v => {
-    expect(v).toMatch(/^[a-f0-9]{8}-[a-f0-9]{4}-3[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/);
-  });
-});
