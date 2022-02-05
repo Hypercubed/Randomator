@@ -4,16 +4,6 @@ import { Randomator } from './src/';
 
 import nodeCrypto from 'crypto';
 
-declare global {
-  namespace jest {
-    interface Matchers<R> {
-      toPassFreqTest(categories?: unknown[], expectations?: number[], dof?: number, N?: number): R;
-      toPassRunsTest(): R;
-      forMany(fn: (v: unknown | unknown[]) => void): R;
-    }
-  }
-}
-
 global.crypto = {
   getRandomValues: function(buffer: any) { return nodeCrypto.randomFillSync(buffer); }
 } as any;

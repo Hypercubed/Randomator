@@ -22,7 +22,7 @@ const config: Config.InitialOptions = {
   globals: {
     'ts-jest': {
       useESM: true,
-      tsconfig: 'tsconfig.test.json',
+      tsconfig: 'tsconfig.json',
       diagnostics: false
     }
   },
