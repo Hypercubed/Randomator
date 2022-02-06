@@ -26,10 +26,18 @@ export class Randomator<T = unknown> extends Function implements Iterable<T> {
     return this;
   }
 
-  constructor(generate: GenerateFunction<T>) {
+  constructor(protected readonly generate: GenerateFunction<T>) {
     super();
     const call = () => Randomator.unwrap(generate());
+    call.generate = generate;
     return Object.setPrototypeOf(call, new.target.prototype);
+
+    // TODO: test performance
+    // return new Proxy(this, {
+    //   apply: function() {
+    //     return Randomator.unwrap(generate());
+    //   }
+    // });
   }
 
   *[Symbol.iterator](): Iterator<T> {
@@ -101,6 +109,11 @@ export class Randomator<T = unknown> extends Function implements Iterable<T> {
    */
   toArray(length: number): Array<T> {
     return Array.from({ length }, () => this());
+  }
+
+  toString(): string {
+    const ctor = this.constructor.name;
+    return this.generate ? `${ctor}(${this.generate.toString()})` : `[Function: bound] ${ctor}`;
   }
 }
 

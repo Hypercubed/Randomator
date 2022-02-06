@@ -1,11 +1,15 @@
 import { Randomator } from './randomator.js';
 
-// const a$ = Randomator.from('a');
 const ab$ = Randomator.from(() => (Math.random() < 0.5 ? 'a' : 'b'));
 
 describe('Randomator', () => {
   test('is a Randomator', () => {
     expect(ab$).toBeInstanceOf(Randomator);
+  });
+
+  test('toString', () => {
+    expect(ab$.toString()).toMatchInlineSnapshot(`"Randomator(() => (Math.random() < 0.5 ? 'a' : 'b'))"`);
+    expect(ab$.bind(null).toString()).toMatchInlineSnapshot(`"[Function: bound] Randomator"`);
   });
 
   test('unwrap', () => {
