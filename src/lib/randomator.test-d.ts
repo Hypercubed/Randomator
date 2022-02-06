@@ -39,7 +39,7 @@ expectNotType<number>(h$());
 expectType<string>(h$());
 
 // chain
-const i = e$.chain(a => a + a);
+const i = e$.fold(a => a + a);
 expectType<number>(i);
 
 // filter

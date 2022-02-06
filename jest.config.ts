@@ -16,6 +16,8 @@ const config: Config.InitialOptions = {
   collectCoverageFrom: [
     "src/lib/**/*.ts",
     "!src/lib/**/index.ts", 
+    "!src/lib/**/*.d.ts",
+    "!src/lib/**/*.test-d.ts",
     "!src/lib/setupJest.ts",
   ],
   setupFilesAfterEnv: ['./jest.setup.ts'],

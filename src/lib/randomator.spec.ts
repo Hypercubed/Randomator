@@ -57,7 +57,7 @@ describe('Randomator', () => {
   });
 
   test('#next', () => {
-    expect(ab$.next()).toMatch(/[ab]/);
+    expect(ab$.next().value).toMatch(/[ab]/);
   });
 
   test('#map', () => {
@@ -69,11 +69,13 @@ describe('Randomator', () => {
     });
   });
 
-  test('#chain', () => {
+  test('#fold', () => {
     for (let i = 0; i < 30; i++) {
-      const r = ab$.chain(_ => _ + _.toUpperCase());
+      const r = ab$.fold(_ => _ + _.toUpperCase());
       expect(typeof r).toBe('string');
       expect(r).toMatch(/aA|bB/);
+
+      expect(ab$.fold()).toMatch(/[ab]/);
     }
   });
 
