@@ -5,6 +5,7 @@ const ab$ = Randomator.from(() => (Math.random() < 0.5 ? 'a' : 'b'));
 describe('Randomator', () => {
   test('is a Randomator', () => {
     expect(ab$).toBeInstanceOf(Randomator);
+    expect(ab$.constructor).toBe(Randomator);
   });
 
   test('toString', () => {

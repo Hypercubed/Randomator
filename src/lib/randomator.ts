@@ -1,6 +1,8 @@
 export type MaybeRandomator<T = unknown> = T | Randomator<MaybeRandomator<T>>;
 export type GenerateFunction<T> = () => T;
 
+// const ToString = Symbol('toString');
+
 /**
  * Randomator class
  */
@@ -26,18 +28,13 @@ export class Randomator<T = unknown> extends Function implements Iterable<T> {
     return this;
   }
 
-  constructor(protected readonly generate: GenerateFunction<T>) {
-    super();
-    const call = () => Randomator.unwrap(generate());
-    call.generate = generate;
-    return Object.setPrototypeOf(call, new.target.prototype);
 
-    // TODO: test performance
-    // return new Proxy(this, {
-    //   apply: function() {
-    //     return Randomator.unwrap(generate());
-    //   }
-    // });
+  constructor(generate: GenerateFunction<T>) {
+    super();
+    this[Symbol.toStringTag] = `${this.constructor.name}(${generate.toString()})`;
+    return new Proxy(this, {
+      apply: () => Randomator.unwrap(generate())
+    });
   }
 
   *[Symbol.iterator](): Iterator<T> {
@@ -112,8 +109,7 @@ export class Randomator<T = unknown> extends Function implements Iterable<T> {
   }
 
   toString(): string {
-    const ctor = this.constructor.name;
-    return this.generate ? `${ctor}(${this.generate.toString()})` : `[Function: bound] ${ctor}`;
+    return this[Symbol.toStringTag] || '[Function: bound] Randomator';
   }
 }
 
