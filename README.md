@@ -60,8 +60,7 @@ A more involved example is the `string` function which take several options and 
 ```js
 const chars$ = chars({ pool: 'abc' });
 const length$ = integers({ min: 3, max: 13 });
-const string$ = strings({ chars: chars$, length: length$ });
-console.log(string$());  // Prints a string between three (3) and 13 characters (inclusive) of 'a', 'b' or 'c'.
+const string$ = strings({ chars: chars$, length: length$ }); // A randomator that generates string between three (3) and 13 characters (inclusive) of 'a', 'b' or 'c'.
 ```
 
 And operators:

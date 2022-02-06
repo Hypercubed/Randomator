@@ -103,3 +103,7 @@ export class Randomator<T = unknown> extends Function implements Iterable<T> {
     return Array.from({ length }, () => this());
   }
 }
+
+export interface Randomator<T> {
+  (): T;
+}
