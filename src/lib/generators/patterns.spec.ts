@@ -1,4 +1,15 @@
-import { pattern, uuids, phoneNumbers } from './patterns';
+import { oneOf } from '../operators';
+import { pattern, uuids } from './patterns';
+
+export const phoneNumbers = () =>
+  oneOf([
+    pattern('!##-!##-####'),
+    pattern('(!##) !##-####'),
+    pattern('1-!##-!##-####'),
+    pattern('!##-!##-#### ####'),
+    pattern('(!##) !##-#### ####'),
+    pattern('1-!##-!##-#### ####')
+  ]);
 
 test('pattern', () => {
   expect(pattern('___-^^^-###')).forMany(v => {

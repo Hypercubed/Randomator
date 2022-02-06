@@ -1,4 +1,4 @@
-import { oneOf, seq } from '../operators';
+import { seq } from '../operators';
 import { MaybeRandomator, Randomator } from '../randomator';
 import { integers } from './numbers';
 import { chars } from './strings';
@@ -51,13 +51,3 @@ export function uuids(version: MaybeRandomator<number> = integers({ min: 1, max:
 // TODO: test
 // export const ipv6s = () => pattern('xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx');
 // export const macs = () => pattern('XX:XX:XX:XX:XX:XX');
-
-export const phoneNumbers = () =>
-  oneOf([
-    pattern('!##-!##-####'),
-    pattern('(!##) !##-####'),
-    pattern('1-!##-!##-####'),
-    pattern('!##-!##-#### ####'),
-    pattern('(!##) !##-#### ####'),
-    pattern('1-!##-!##-#### ####')
-  ]);
