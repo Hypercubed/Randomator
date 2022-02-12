@@ -25,8 +25,8 @@ expectType<string>(r$().abc);
 expectType<string | number>(r$().ab1);
 expectType<number>(r$().number);
 
-const t$ = tuple([abc$, ab1$, number$, number$]);
-expectType<(string | number)[]>(t$());
+const t$ = tuple([abc$, ab1$, number$]);
+expectType<[string, string | number, number]>(t$());
 expectType<string>(t$()[0]);
 expectType<string | number>(t$()[1]);
 expectType<number>(t$()[2]);
