@@ -139,12 +139,20 @@ type UnwrappedTuple<T extends MaybeTuple> = {
  */
 export function tuple<T>(args: [MaybeRandomator<T>]): Randomator<[T]>;
 export function tuple<T1, T2>(args: [MaybeRandomator<T1>, MaybeRandomator<T2>]): Randomator<[T1, T2]>;
-export function tuple<T1, T2, T3>(args: [MaybeRandomator<T1>, MaybeRandomator<T2>, MaybeRandomator<T3>]): Randomator<[T1, T2, T3]>;
-export function tuple<T1, T2, T3, T4>(args: [MaybeRandomator<T1>, MaybeRandomator<T2>, MaybeRandomator<T3>, MaybeRandomator<T4>]): Randomator<[T1, T2, T3, T4]>;
-export function tuple<T1, T2, T3, T4, T5>(args: [MaybeRandomator<T1>, MaybeRandomator<T2>, MaybeRandomator<T3>, MaybeRandomator<T4>, MaybeRandomator<T5>]): Randomator<[T1, T2, T3, T4, T5]>;
+export function tuple<T1, T2, T3>(
+  args: [MaybeRandomator<T1>, MaybeRandomator<T2>, MaybeRandomator<T3>]
+): Randomator<[T1, T2, T3]>;
+export function tuple<T1, T2, T3, T4>(
+  args: [MaybeRandomator<T1>, MaybeRandomator<T2>, MaybeRandomator<T3>, MaybeRandomator<T4>]
+): Randomator<[T1, T2, T3, T4]>;
+export function tuple<T1, T2, T3, T4, T5>(
+  args: [MaybeRandomator<T1>, MaybeRandomator<T2>, MaybeRandomator<T3>, MaybeRandomator<T4>, MaybeRandomator<T5>]
+): Randomator<[T1, T2, T3, T4, T5]>;
 export function tuple<T extends MaybeTuple>(args: T): Randomator<UnwrappedTuple<T>>;
-export function tuple(args: any): any {
-  return new Randomator(() => args.map(Randomator.unwrap)) as any;
+
+// eslint-disable-next-line  @typescript-eslint/no-explicit-any
+export function tuple(args: any[]): Randomator<any[]> {
+  return new Randomator(() => args.map(Randomator.unwrap));
 }
 
 function join<T>(arg: Randomator<T[]>, { separator }): Randomator<string> {
@@ -171,6 +179,7 @@ export function seq(args: MaybeRandomator[], opts = { separator: '' }): Randomat
  */
 export function array<T>(arg: MaybeRandomator<T>, length: number): Randomator<T[]> {
   const arr = Array.from({ length }).fill(arg) as MaybeRandomator<T>[];
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   return tuple(arr) as any;
 }
 

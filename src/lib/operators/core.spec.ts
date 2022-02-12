@@ -189,7 +189,7 @@ test('record', () => {
     id: integers({ max: 10, min: 5 }),
     str: strings()
   });
-  
+
   expect(r$).forMany((v: { id: number; str: string }) => {
     expect(typeof v).toBe('object');
     expect(v.id).toBeGreaterThanOrEqual(5);
