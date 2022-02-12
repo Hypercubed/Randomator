@@ -7,7 +7,9 @@ _(none)_
 ---
 
 ## 3.0.1 (2022-02-12)
-_(none)_
+
+* Improve types for `record` and `tuple` operators.
+* Fix "Cannot find module '../rng/types'" error.
 
 ## 3.0.0 (2022-02-06)
 
