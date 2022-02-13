@@ -197,8 +197,7 @@ test('record', () => {
     expect(v.str).toMatch(/^[a-zA-Z\d!@#$%^&*()]{5,20}$/);
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const rr$ = record<any>({
+  const rr$ = record({
     id: integers({ max: 10, min: 5 }),
     person: record({ name: strings() })
   });
@@ -219,8 +218,7 @@ test('object', () => {
     expect(v.str).toMatch(/^[a-zA-Z\d!@#$%^&*()]{5,20}$/);
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const oo$ = object<any>({
+  const oo$ = object({
     id: integers({ max: 10, min: 5 }),
     person: { name: strings() }
   });
