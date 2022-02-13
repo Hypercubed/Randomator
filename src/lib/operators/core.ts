@@ -82,10 +82,8 @@ export function unique<T>(arg: Randomator<T>, length: number): Randomator<T[]> {
   });
 }
 
-type Unwrapped<T> = T extends MaybeRandomator<infer U> ? U : T;
-
-type UnwrappedRecord<T> = {
-  [P in keyof T]: Unwrapped<T[P]>;
+type MaybeRandomatorRecord<T> = {
+  [K in keyof T]: MaybeRandomator<T[K]>;
 };
 
 /**
@@ -94,13 +92,13 @@ type UnwrappedRecord<T> = {
  * @param obj
  * @returns
  */
-export function record<T>(obj: T): Randomator<UnwrappedRecord<T>> {
+export function record<T>(obj: MaybeRandomatorRecord<T>): Randomator<T> {
   const keys = Object.keys(obj);
   return new Randomator(() => {
     return keys.reduce((acc, key: string) => {
       acc[key] = Randomator.unwrap(obj[key]);
       return acc;
-    }, {}) as UnwrappedRecord<T>;
+    }, {}) as T;
   });
 }
 
@@ -110,25 +108,25 @@ export function record<T>(obj: T): Randomator<UnwrappedRecord<T>> {
  * @param obj
  * @returns
  */
-export function object<T>(obj: Record<string, MaybeRandomator<T>>): Randomator<Record<string, T>> {
+export function object<T>(obj: MaybeRandomatorRecord<T>): Randomator<T> {
   return new Randomator(() => process(obj));
   // TODO: max depth
   // TODO: optimize
 
-  function process(_obj: Record<string, MaybeRandomator<T>>): Record<string, T> {
+  function process(_obj: MaybeRandomatorRecord<T>): T {
     return Object.keys(_obj).reduce((acc, key: string) => {
       acc[key] = Randomator.unwrap(_obj[key]);
       if (typeof acc[key] === 'object') {
         acc[key] = process(acc[key]);
       }
       return acc;
-    }, {});
+    }, {} as T);
   }
 }
 
-type MaybeTuple = [...MaybeRandomator[]];
-type UnwrappedTuple<T extends MaybeTuple> = {
-  [I in keyof T]: Unwrapped<T[I]>;
+type Arr = readonly unknown[];
+type MaybeRandomatorTuple<T extends Arr> = {
+  [I in keyof T]: MaybeRandomator<T[I]>;
 } & { length: T['length'] };
 
 /**
@@ -145,13 +143,8 @@ export function tuple<T1, T2, T3>(
 export function tuple<T1, T2, T3, T4>(
   args: [MaybeRandomator<T1>, MaybeRandomator<T2>, MaybeRandomator<T3>, MaybeRandomator<T4>]
 ): Randomator<[T1, T2, T3, T4]>;
-export function tuple<T1, T2, T3, T4, T5>(
-  args: [MaybeRandomator<T1>, MaybeRandomator<T2>, MaybeRandomator<T3>, MaybeRandomator<T4>, MaybeRandomator<T5>]
-): Randomator<[T1, T2, T3, T4, T5]>;
-export function tuple<T extends MaybeTuple>(args: T): Randomator<UnwrappedTuple<T>>;
-
-// eslint-disable-next-line  @typescript-eslint/no-explicit-any
-export function tuple(args: any[]): Randomator<any[]> {
+export function tuple<T extends Arr>(args: MaybeRandomatorTuple<T>): Randomator<T>;
+export function tuple(args: Arr): Randomator<Arr> {
   return new Randomator(() => args.map(Randomator.unwrap));
 }
 
@@ -166,7 +159,7 @@ function join<T>(arg: Randomator<T[]>, { separator }): Randomator<string> {
  * @param opts
  * @returns
  */
-export function seq(args: MaybeRandomator[], opts = { separator: '' }): Randomator<string> {
+export function seq<T extends unknown[]>(args: MaybeRandomatorTuple<T>, opts = { separator: '' }): Randomator<string> {
   return join(tuple(args), opts);
 }
 

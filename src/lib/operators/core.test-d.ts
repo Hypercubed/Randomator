@@ -31,6 +31,12 @@ expectType<string>(t$()[0]);
 expectType<string | number>(t$()[1]);
 expectType<number>(t$()[2]);
 
+const t2$ = tuple([abc$, ab1$, number$, number$, number$]);
+expectType<(string | number)[]>(t2$());
+expectType<string | number>(t2$()[0]);
+expectType<string | number>(t2$()[1]);
+expectType<string | number>(t2$()[2]);
+
 const a$ = array(abc$, 3);
 expectType<string[]>(a$());
 

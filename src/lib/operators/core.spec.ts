@@ -208,7 +208,7 @@ test('record', () => {
 });
 
 test('object', () => {
-  const o$ = object<string | number>({
+  const o$ = object({
     id: integers({ max: 10, min: 5 }),
     str: strings()
   });
