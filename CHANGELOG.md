@@ -2,10 +2,13 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-
-* Added `#ap` and `#switchMap` methods.
+_(none)_
 
 ---
+
+## 3.1.0 (2022-02-27)
+
+* Added `#ap` and `#switchMap` methods.
 
 ## 3.0.2 (2022-02-26)
 * Improve types for `record` and `tuple` operators.
