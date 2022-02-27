@@ -70,9 +70,9 @@ export class Randomator<T = unknown> extends Function implements Iterator<T> {
 
   /**
    * Returns a new Randomator from a mapped Randomator whose source is now this Randomator
-   * 
+   *
    * @param mapper a Randomator
-   * @returns 
+   * @returns
    */
   switchMap<U>(mapper: Randomator<U>): Randomator<U> {
     const mapping = mapper[MappingFunction];
@@ -84,9 +84,9 @@ export class Randomator<T = unknown> extends Function implements Iterator<T> {
 
   /**
    * Returns a random value, whose initial value (pre-mapped) is now the passed value
-   * 
+   *
    * @param value A value
-   * @returns 
+   * @returns
    */
   ap<U>(value: unknown): U {
     const mapping = this[MappingFunction];

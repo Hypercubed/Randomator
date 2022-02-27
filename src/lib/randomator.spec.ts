@@ -104,7 +104,7 @@ describe('Randomator', () => {
   });
 
   test('#ap', () => {
-    const r$ = ab$.map(_ => _.toUpperCase());;
+    const r$ = ab$.map(_ => _.toUpperCase());
     expect(r$.ap('c')).toMatch(/C/);
   });
 
