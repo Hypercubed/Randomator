@@ -1,6 +1,9 @@
 export type MaybeRandomator<T = unknown> = T | Randomator<MaybeRandomator<T>>;
 export type GenerateFunction<T> = () => T;
 
+const MappingFunction = Symbol('randomator:mapping');
+const GeneratorFunction = Symbol('randomator:mapping');
+
 /**
  * Randomator class
  */
@@ -31,14 +34,10 @@ export class Randomator<T = unknown> extends Function implements Iterator<T> {
 
     // Optimized for call site performance
     const call = () => Randomator.unwrap(generate());
+    call[MappingFunction] = undefined;
+    call[GeneratorFunction] = generate;
     call[Symbol.toStringTag] = `${this.constructor.name}(${generate.toString()})`;
     return Object.setPrototypeOf(call, new.target.prototype);
-
-    // Cleaner but slower
-    // this[Symbol.toStringTag] = `${this.constructor.name}(${generate.toString()})`;
-    // return new Proxy(this, {
-    //   apply: () => Randomator.unwrap(generate())
-    // });
   }
 
   [Symbol.iterator](): Iterator<T> {
@@ -64,7 +63,37 @@ export class Randomator<T = unknown> extends Function implements Iterator<T> {
    * @returns
    */
   map<U>(mapping: (_: T) => MaybeRandomator<U>): Randomator<U> {
-    return new Randomator(() => mapping.call(this, this()));
+    const randomator = new Randomator(() => mapping.call(this, this()));
+    randomator[MappingFunction] = mapping;
+    return randomator;
+  }
+
+  /**
+   * Returns a new Randomator from a mapped Randomator whose source is now this Randomator
+   * 
+   * @param mapper a Randomator
+   * @returns 
+   */
+  switchMap<U>(mapper: Randomator<U>): Randomator<U> {
+    const mapping = mapper[MappingFunction];
+    if (!mapping) {
+      throw new Error('switchMap requires a mapped Randomator');
+    }
+    return this.map(mapping);
+  }
+
+  /**
+   * Returns a random value, whose initial value (pre-mapped) is now the passed value
+   * 
+   * @param value A value
+   * @returns 
+   */
+  ap<U>(value: unknown): U {
+    const mapping = this[MappingFunction];
+    if (!mapping) {
+      throw new Error('ap can only be called on a mapped Randomator');
+    }
+    return Randomator.unwrap(mapping.call(this, value));
   }
 
   /**

@@ -2,16 +2,16 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-_(none)_
+
+* Added `#ap` and `#switchMap` methods.
 
 ---
 
 ## 3.0.2 (2022-02-26)
-_(none)_
+* Improve types for `record` and `tuple` operators.
 
 ## 3.0.1 (2022-02-12)
 
-* Improve types for `record` and `tuple` operators.
 * Fix "Cannot find module '../rng/types'" error.
 
 ## 3.0.0 (2022-02-06)

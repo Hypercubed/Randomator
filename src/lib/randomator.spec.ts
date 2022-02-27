@@ -1,5 +1,6 @@
 import { Randomator } from './randomator.js';
 
+const c$ = Randomator.from('c');
 const ab$ = Randomator.from(() => (Math.random() < 0.5 ? 'a' : 'b'));
 
 describe('Randomator', () => {
@@ -92,6 +93,19 @@ describe('Randomator', () => {
     const r = ab$.pipe(_ => _() + _());
     expect(r).toBeInstanceOf(Randomator);
     expect(r).toPassFreqTest(['aa', 'bb', 'ab', 'ba']);
+  });
+
+  test('#switchMap', () => {
+    const r$ = ab$.map(_ => _.toUpperCase());
+    const n$ = c$.switchMap(r$);
+    expect(n$).forMany(v => {
+      expect(v).toMatch(/C/);
+    });
+  });
+
+  test('#ap', () => {
+    const r$ = ab$.map(_ => _.toUpperCase());;
+    expect(r$.ap('c')).toMatch(/C/);
   });
 
   test('#toArray', () => {
