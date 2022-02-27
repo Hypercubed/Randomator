@@ -1,8 +1,7 @@
-export type MaybeRandomator<T = unknown> = T | Randomator<MaybeRandomator<T>>;
-export type GenerateFunction<T> = () => T;
+import { filter, map, switchMap } from './operators/pipeable.js';
+import { MappingFunction } from './symbols.js';
 
-const MappingFunction = Symbol('randomator:mapping');
-const GeneratorFunction = Symbol('randomator:mapping');
+import type { GenerateFunction, MaybeRandomator, Pipe } from './types.js';
 
 /**
  * Randomator class
@@ -35,7 +34,6 @@ export class Randomator<T = unknown> extends Function implements Iterator<T> {
     // Optimized for call site performance
     const call = () => Randomator.unwrap(generate());
     call[MappingFunction] = undefined;
-    call[GeneratorFunction] = generate;
     call[Symbol.toStringTag] = `${this.constructor.name}(${generate.toString()})`;
     return Object.setPrototypeOf(call, new.target.prototype);
   }
@@ -56,6 +54,26 @@ export class Randomator<T = unknown> extends Function implements Iterator<T> {
     };
   }
 
+  lift<U>(generate: GenerateFunction<U>): Randomator<U> {
+    return new Randomator(generate);
+  }
+
+  /**
+   * Returns a new Randomator based on the pipe
+   *
+   * @param mapper
+   * @returns
+   */
+  pipe<U>(...fns: Array<Pipe<T, U>>): Randomator<U> {
+    if (fns.length === 0) {
+      return this as unknown as Randomator<U>;
+    }
+    if (fns.length === 1) {
+      return fns[0](this);
+    }
+    return fns.reduce((acc, fn) => fn(acc) as unknown, this) as unknown as Randomator<U>;
+  }
+
   /**
    * Returns a new Randomator with mapped values
    *
@@ -63,9 +81,17 @@ export class Randomator<T = unknown> extends Function implements Iterator<T> {
    * @returns
    */
   map<U>(mapping: (_: T) => MaybeRandomator<U>): Randomator<U> {
-    const randomator = new Randomator(() => mapping.call(this, this()));
-    randomator[MappingFunction] = mapping;
-    return randomator;
+    return this.pipe(map(mapping));
+  }
+
+  /**
+   * Returns a new Randomator with that returns only values that pass the predicate
+   *
+   * @param predicate
+   * @returns
+   */
+  filter(predicate: (_: T) => boolean): Randomator<T> {
+    return this.pipe(filter(predicate));
   }
 
   /**
@@ -75,11 +101,7 @@ export class Randomator<T = unknown> extends Function implements Iterator<T> {
    * @returns
    */
   switchMap<U>(mapper: Randomator<U>): Randomator<U> {
-    const mapping = mapper[MappingFunction];
-    if (!mapping) {
-      throw new Error('switchMap requires a mapped Randomator');
-    }
-    return this.map(mapping);
+    return this.pipe(switchMap(mapper));
   }
 
   /**
@@ -105,32 +127,6 @@ export class Randomator<T = unknown> extends Function implements Iterator<T> {
   fold<U>(mapping?: (_: T) => MaybeRandomator<U>): U {
     const value = this();
     return Randomator.unwrap(mapping ? mapping.call(this, value) : value);
-  }
-
-  /**
-   * Returns a new Randomator based on the pipe
-   *
-   * @param mapper
-   * @returns
-   */
-  pipe<U>(mapper: (_: this) => MaybeRandomator<U>): Randomator<U> {
-    return new Randomator(() => mapper.call(this, this));
-  }
-
-  /**
-   * Returns a new Randomator with that returns only values that pass the predicate
-   *
-   * @param predicate
-   * @returns
-   */
-  filter(predicate: (_: T) => boolean): Randomator<T> {
-    return new Randomator(() => {
-      let next = this();
-      while (!predicate.call(this, next)) {
-        next = this();
-      }
-      return next;
-    });
   }
 
   /**

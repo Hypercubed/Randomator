@@ -1,4 +1,4 @@
-import type { Rng } from '../rng/types';
+import type { Rng } from '../types';
 
 import { Randomator } from '../randomator.js';
 import { checkOptions } from '../utils.js';

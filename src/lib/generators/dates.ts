@@ -1,4 +1,4 @@
-import type { Rng } from '../rng/types';
+import type { Rng } from '../types';
 
 import { IntegerOptions, integers } from './numbers.js';
 import { Randomator } from '../randomator.js';

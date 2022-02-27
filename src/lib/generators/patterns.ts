@@ -1,8 +1,10 @@
 import { seq } from '../operators';
-import { MaybeRandomator, Randomator } from '../randomator';
+import { Randomator } from '../randomator';
 import { integers } from './numbers';
 import { chars } from './strings';
 import { ALPHA, ALPHANUM, HEX_CHARS, LCASE, UCASE } from './strings.constants';
+
+import type { MaybeRandomator } from '../types';
 
 /**
  * Generates a random string using a pattern

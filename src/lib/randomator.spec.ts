@@ -90,9 +90,17 @@ describe('Randomator', () => {
   });
 
   test('#pipe', () => {
-    const r = ab$.pipe(_ => _() + _());
-    expect(r).toBeInstanceOf(Randomator);
-    expect(r).toPassFreqTest(['aa', 'bb', 'ab', 'ba']);
+    const r$ = ab$.pipe();
+
+    expect(r$).forMany(v => {
+      expect(v).toMatch(/a|b/);
+    });
+
+    const r2$ = ab$.pipe(_ => _);
+
+    expect(r2$).forMany(v => {
+      expect(v).toMatch(/a|b/);
+    });
   });
 
   test('#switchMap', () => {
