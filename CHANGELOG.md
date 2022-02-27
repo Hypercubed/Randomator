@@ -6,6 +6,9 @@ _(none)_
 
 ---
 
+## 3.0.2 (2022-02-26)
+_(none)_
+
 ## 3.0.1 (2022-02-12)
 
 * Improve types for `record` and `tuple` operators.
