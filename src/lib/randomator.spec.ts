@@ -103,9 +103,17 @@ describe('Randomator', () => {
     });
   });
 
+  test('#switchMap throws on unmapped randomator', () => {
+    expect(() => ab$.switchMap(c$)).toThrow('switchMap requires a mapped Randomator');
+  });
+
   test('#ap', () => {
     const r$ = ab$.map(_ => _.toUpperCase());
     expect(r$.ap('c')).toMatch(/C/);
+  });
+
+  test('#ap throws on unmapped randomator', () => {
+    expect(() => ab$.ap(c$)).toThrow('ap can only be called on a mapped Randomator');
   });
 
   test('#toArray', () => {
