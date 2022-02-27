@@ -2,9 +2,12 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-* Fix typing for `#ap`
+_(none)_
 
 ---
+
+## 3.1.1 (2022-02-27)
+* Fix typing for `#ap`
 
 ## 3.1.0 (2022-02-27)
 
