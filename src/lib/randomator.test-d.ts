@@ -49,3 +49,12 @@ expectType<number>(j$());
 // toArray
 const k = e$.toArray(5);
 expectType<number[]>(k);
+
+// switchMap
+const l$ = e$.map(n => n + n);
+const m$ = l$.switchMap(a$);
+expectType<string>(m$());
+
+// ap
+const n = l$.ap(10);
+expectType<number>(n);

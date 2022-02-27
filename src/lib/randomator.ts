@@ -88,7 +88,7 @@ export class Randomator<T = unknown> extends Function implements Iterator<T> {
    * @param value A value
    * @returns
    */
-  ap<U>(value: unknown): U {
+  ap(value: unknown): T {
     const mapping = this[MappingFunction];
     if (!mapping) {
       throw new Error('ap can only be called on a mapped Randomator');

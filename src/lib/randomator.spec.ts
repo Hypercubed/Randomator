@@ -109,7 +109,8 @@ describe('Randomator', () => {
 
   test('#ap', () => {
     const r$ = ab$.map(_ => _.toUpperCase());
-    expect(r$.ap('c')).toMatch(/C/);
+    const v = r$.ap('c');
+    expect(v).toMatch(/C/);
   });
 
   test('#ap throws on unmapped randomator', () => {
