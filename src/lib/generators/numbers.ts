@@ -1,40 +1,39 @@
 import type { Rng } from '../types';
 
 import { Randomator } from '../randomator.js';
-import { checkOptions } from '../utils.js';
+import { getOptions } from '../utils.js';
 import { UINT32_SIZE } from './numbers.constants.js';
+import { map } from '../operators/pipeable';
 
-export interface NumberOptions {
-  rng?: Rng;
-}
+const NumberDefaults = {
+  rng: Math.random as Rng
+};
 
 /**
  * Generates a number between 0 and 1 (inclusive of 0, but excluding 1).
  *
  * @returns
  */
-export function numbers(options: Partial<NumberOptions> = {}): Randomator<number> {
-  checkOptions(['rng'], options);
-  const { rng = Math.random } = options;
+export function numbers(options?: Partial<typeof NumberDefaults>): Randomator<number> {
+  const { rng } = getOptions(NumberDefaults, options);
   return Randomator.from(rng);
 }
 
-export interface IntegerOptions extends NumberOptions {
-  max?: number;
-  min?: number;
+export function uint32s(options?: Partial<typeof NumberDefaults>): Randomator<number> {
+  const { rng } = getOptions(NumberDefaults, options);
+  return numbers({ rng }).pipe(map(r => (r * UINT32_SIZE) >>> 0));
 }
 
-export function uint32s(options: NumberOptions = {}): Randomator<number> {
-  checkOptions(['rng'], options);
-  const { rng } = options;
-  return numbers({ rng }).map(r => (r * UINT32_SIZE) >>> 0);
+export function int32s(options?: Partial<typeof NumberDefaults>): Randomator<number> {
+  const { rng } = getOptions(NumberDefaults, options);
+  return numbers({ rng }).pipe(map(r => (r * UINT32_SIZE) | 0));
 }
 
-export function int32s(options: NumberOptions = {}): Randomator<number> {
-  checkOptions(['rng'], options);
-  const { rng } = options;
-  return numbers({ rng }).map(r => (r * UINT32_SIZE) | 0);
-}
+const IntegerDefaults = {
+  ...NumberDefaults,
+  max: 9,
+  min: 0
+};
 
 /**
  * Generates a integer between min and max inclusive.
@@ -42,9 +41,9 @@ export function int32s(options: NumberOptions = {}): Randomator<number> {
  * @param options
  * @returns
  */
-export function integers(options: IntegerOptions = {}): Randomator<number> {
-  checkOptions(['max', 'min', 'rng'], options);
-  let { max = 9, min = 0 } = options;
+export function integers(options?: Partial<typeof IntegerDefaults>): Randomator<number> {
+  // eslint-disable-next-line prefer-const
+  let { max, min, rng } = getOptions(IntegerDefaults, options);
   max = Math.floor(max);
   min = Math.floor(min);
   if (max > Number.MAX_SAFE_INTEGER) {
@@ -54,17 +53,17 @@ export function integers(options: IntegerOptions = {}): Randomator<number> {
     throw new RangeError(`min must be greater than ${Number.MIN_SAFE_INTEGER}`);
   }
   const range = max - min + 1;
-  return numbers({ rng: options.rng }).map(r => Math.floor(range * r) + min);
+  return numbers({ rng }).pipe(map(r => Math.floor(range * r) + min));
 }
 
-export interface BigIntegerOptions extends NumberOptions {
-  max?: bigint;
-  min?: bigint;
-}
+const BigIntegerOptions = {
+  ...NumberDefaults,
+  max: 9n,
+  min: 0n
+};
 
-export function bigIntegers(options: BigIntegerOptions = {}): Randomator<bigint> {
-  checkOptions(['max', 'min', 'rng'], options);
-  const { max = 9n, min = 0n, rng = Math.random } = options;
+export function bigIntegers(options?: Partial<typeof BigIntegerOptions>): Randomator<bigint> {
+  const { max, min, rng } = getOptions(BigIntegerOptions, options);
 
   const difference = max - min + 1n;
   const differenceLength = difference.toString().length;
@@ -83,15 +82,17 @@ export function bigIntegers(options: BigIntegerOptions = {}): Randomator<bigint>
 }
 
 // TODO: test
-export function bytes(options: NumberOptions = {}): Randomator<number> {
-  checkOptions(['rng'], options);
-  const { rng } = options;
-  return numbers({ rng }).map(r => (r * 255) >>> 0);
+export function bytes(options?: Partial<typeof NumberDefaults>): Randomator<number> {
+  const { rng } = getOptions(NumberDefaults, options);
+  return numbers({ rng }).pipe(map(r => (r * 255) >>> 0));
 }
 
-export interface FloatOptions extends IntegerOptions {
-  fixed?: number;
-}
+const FloatDefaults = {
+  ...IntegerDefaults,
+  min: 0,
+  max: 1,
+  fixed: 4
+};
 
 /**
  * Generates a number between `min` and `max` rounded to `fixed` decimal places
@@ -99,27 +100,29 @@ export interface FloatOptions extends IntegerOptions {
  * @param options
  * @returns
  */
-export function floats(options: FloatOptions = {}): Randomator<number> {
-  checkOptions(['max', 'min', 'fixed', 'rng'], options);
-  const { min = 0, max = 1, fixed = 4, rng } = options;
+export function floats(options?: Partial<typeof FloatDefaults>): Randomator<number> {
+  // eslint-disable-next-line prefer-const
+  let { min, max, fixed, rng } = getOptions(FloatDefaults, options);
   const f = Math.pow(10, fixed);
-  return integers({ max: max * f, min: min * f, rng }).map(i => +(i / f).toFixed(fixed));
+  max *= f;
+  min *= f;
+  return integers({ max: max, min, rng }).pipe(map(i => +(i / f).toFixed(fixed)));
 }
 
-interface BooleanOptions extends NumberOptions {
-  probability?: number;
-}
+const BooleanDefaults = {
+  ...NumberDefaults,
+  probability: 0.5
+};
 
 /**
  * Generates a boolean (`true | false`)
  *
  * @returns
  */
-export function booleans(options: BooleanOptions = {}): Randomator<boolean> {
-  checkOptions(['rng', 'probability'], options);
-  const { probability = 0.5, rng } = options;
+export function booleans(options?: Partial<typeof BooleanDefaults>): Randomator<boolean> {
+  const { probability, rng } = getOptions(BooleanDefaults, options);
   if (probability < 0 || probability > 1) {
     throw new RangeError(`probability must be between 0 and 1`);
   }
-  return numbers({ rng }).map(x => x < probability);
+  return numbers({ rng }).pipe(map(x => x < probability));
 }

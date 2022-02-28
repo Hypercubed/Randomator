@@ -64,14 +64,16 @@ export class Randomator<T = unknown> extends Function implements Iterator<T> {
    * @param mapper
    * @returns
    */
-  pipe<U>(...fns: Array<Pipe<T, U>>): Randomator<U> {
+  pipe<U>(...fns: []): Randomator<U>;
+  pipe<U>(...fns: [...Pipe<T, unknown>[], Pipe<T, U>]): Randomator<U>;
+  pipe<U>(...fns: Array<Pipe<T, unknown>>): Randomator<U> {
     if (fns.length === 0) {
       return this as unknown as Randomator<U>;
     }
     if (fns.length === 1) {
-      return fns[0](this);
+      return fns[0](this) as Randomator<U>;
     }
-    return fns.reduce((acc, fn) => fn(acc) as unknown, this) as unknown as Randomator<U>;
+    return fns.reduce((acc, fn) => fn(acc) as unknown, this) as Randomator<U>;
   }
 
   /**

@@ -8,10 +8,13 @@ export function capitalize(s: string): string {
 /**
  * @hidden
  */
-export function checkOptions(validKeys: string[], options: unknown): void {
+export function getOptions<T>(defaults: T, options: Partial<T>): T {
+  options ||= {};
+  const validKeys = Object.keys(defaults);
   for (const key of Object.keys(options)) {
     if (!validKeys.includes(key)) {
       throw new TypeError(`Unrecognized option: ${key}`);
     }
   }
+  return { ...defaults, ...options };
 }

@@ -1,6 +1,6 @@
 import { MappingFunction } from '../symbols.js';
 
-import type { Randomator } from '../randomator.js';
+import { Randomator } from '../randomator.js';
 import type { MaybeRandomator, Pipe } from '../types.js';
 
 /**
@@ -51,4 +51,15 @@ export function switchMap<R>(mapped: Randomator<R>, thisArg?: unknown): Pipe<unk
     throw new Error('switchMap requires a mapped Randomator');
   }
   return map(mapper, thisArg);
+}
+
+export function repeatBy(len: MaybeRandomator<number>, options = { separator: '' }): Pipe<unknown, string> {
+  return (source: Randomator) => {
+    return Randomator.from(len).pipe(
+      map((length: number) => {
+        const arr = Array.from({ length }).fill(source);
+        return arr.map(Randomator.unwrap).join(options.separator);
+      })
+    );
+  };
 }
