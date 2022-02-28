@@ -1,5 +1,6 @@
 import { MappingFunction } from '../symbols.js';
-import { from, pipeFromArray, unwrap } from '../internal/index.js';
+import { unwrap } from '../internal/unwrap.js';
+import { pipeFromArray } from '../internal/pipe.js';
 
 import type { MaybeRandomator, Pipe } from '../types.js';
 import type { Randomator } from '../randomator.js';
@@ -55,9 +56,17 @@ export function switchMap<R>(mapped: Randomator<R>, thisArg?: unknown): Pipe<unk
 }
 
 export function repeatOf<R>(len: MaybeRandomator<number>): Pipe<R, R[]> {
-  const len$ = from(len);
+  if (typeof len === 'number') {
+    return source => {
+      return source.lift(() => {
+        const arr = Array.from({ length: len }).fill(source);
+        return arr.map(unwrap) as R[];
+      });
+    };
+  }
+
   return source => {
-    return len$.pipe(
+    return len.pipe(
       map((length: number) => {
         const arr = Array.from({ length }).fill(source);
         return arr.map(unwrap) as R[];

@@ -1,4 +1,6 @@
-import { from, pipeFromArray, unwrap } from './internal/index.js';
+import { from } from './internal/from.js';
+import { pipeFromArray } from './internal/pipe.js';
+import { unwrap } from './internal/unwrap.js';
 import { filter, map, switchMap } from './operators/pipeable.js';
 import { MappingFunction } from './symbols.js';
 
