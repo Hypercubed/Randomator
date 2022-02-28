@@ -1,7 +1,8 @@
 import { MappingFunction } from '../symbols.js';
+import { from, pipeFromArray, unwrap } from '../internal/index.js';
 
-import { Randomator } from '../randomator.js';
 import type { MaybeRandomator, Pipe } from '../types.js';
+import type { Randomator } from '../randomator.js';
 
 /**
  * Applies a given `mapper` function to each value
@@ -10,7 +11,7 @@ import type { MaybeRandomator, Pipe } from '../types.js';
  * @returns
  */
 export function map<T, R>(mapper: (value: T) => MaybeRandomator<R>, thisArg?: unknown): Pipe<T, R> {
-  return (source: Randomator<T>): Randomator<R> => {
+  return source => {
     thisArg ||= source;
     const randomator = source.lift(() => mapper.call(thisArg, source()));
     randomator[MappingFunction] = mapper;
@@ -26,7 +27,7 @@ export function map<T, R>(mapper: (value: T) => MaybeRandomator<R>, thisArg?: un
  * @returns
  */
 export function filter<T>(predicate: (value: T) => boolean, thisArg?: unknown): Pipe<T, T> {
-  return (source: Randomator): Randomator<T> => {
+  return source => {
     thisArg ||= source;
     return source.lift(() => {
       let next = source();
@@ -53,13 +54,30 @@ export function switchMap<R>(mapped: Randomator<R>, thisArg?: unknown): Pipe<unk
   return map(mapper, thisArg);
 }
 
-export function repeatBy(len: MaybeRandomator<number>, options = { separator: '' }): Pipe<unknown, string> {
-  return (source: Randomator) => {
-    return Randomator.from(len).pipe(
+export function repeatOf<R>(len: MaybeRandomator<number>): Pipe<R, R[]> {
+  const len$ = from(len);
+  return source => {
+    return len$.pipe(
       map((length: number) => {
         const arr = Array.from({ length }).fill(source);
-        return arr.map(Randomator.unwrap).join(options.separator);
+        return arr.map(unwrap) as R[];
       })
     );
   };
+}
+
+export function join(separator = ''): Pipe<unknown[], string> {
+  return map(arr => arr.join(separator));
+}
+
+export function pipe<R>(...ops: []): Pipe<unknown, R>;
+export function pipe<R>(...ops: [...Pipe<unknown, unknown>[], Pipe<unknown, R>]): Pipe<unknown, R>;
+export function pipe<R>(...ops: Pipe<unknown, unknown>[]): Pipe<unknown, R>;
+export function pipe<R>(...ops: Pipe[]): Pipe<unknown, R> {
+  return pipeFromArray(ops);
+}
+
+export function repeatBy(len: MaybeRandomator<number>, options = { separator: '' }): Pipe<unknown, string> {
+  const { separator = '' } = options;
+  return pipe(repeatOf(len), join(separator));
 }

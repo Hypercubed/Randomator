@@ -8,8 +8,7 @@ export function capitalize(s: string): string {
 /**
  * @hidden
  */
-export function getOptions<T>(defaults: T, options: Partial<T>): T {
-  options ||= {};
+export function getOptions<T>(defaults: T, options: Partial<T> = {}): T {
   const validKeys = Object.keys(defaults);
   for (const key of Object.keys(options)) {
     if (!validKeys.includes(key)) {

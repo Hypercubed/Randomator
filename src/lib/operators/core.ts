@@ -2,6 +2,7 @@ import { Randomator } from '../randomator.js';
 import { integers, numbers } from '../generators/numbers.js';
 
 import type { MaybeRandomator } from '../types.js';
+import { map } from './pipeable.js';
 /**
  * Generates a random value from within the given array
  *
@@ -9,7 +10,7 @@ import type { MaybeRandomator } from '../types.js';
  * @returns
  */
 export function oneOf<T>(arr: MaybeRandomator<T>[]): Randomator<T> {
-  return integers({ max: arr.length - 1 }).map(i => arr[i]);
+  return integers({ max: arr.length - 1 }).pipe(map(i => arr[i]));
 }
 
 /**
@@ -21,15 +22,17 @@ export function oneOf<T>(arr: MaybeRandomator<T>[]): Randomator<T> {
  */
 export function weighted<T>(arr: MaybeRandomator<T>[], weights: number[]): Randomator<T> {
   const sum = weights.reduce((acc, v) => acc + v, 0);
-  return numbers().map(n => {
-    const s = n * sum;
-    let t = 0;
-    let idx = weights.findIndex(w => s < (t += w));
+  return numbers().pipe(
+    map(n => {
+      const s = n * sum;
+      let t = 0;
+      let idx = weights.findIndex(w => s < (t += w));
 
-    /* istanbul ignore next */
-    if (idx === -1) idx = weights.length - 1;
-    return arr[idx];
-  });
+      /* istanbul ignore next */
+      if (idx === -1) idx = weights.length - 1;
+      return arr[idx];
+    })
+  );
 }
 
 /**
@@ -148,7 +151,7 @@ export function tuple(args: Arr): Randomator<Arr> {
 }
 
 function join<T>(arg: Randomator<T[]>, { separator }): Randomator<string> {
-  return arg.map(arr => arr.map(String).join(separator || ''));
+  return arg.pipe(map(arr => arr.map(String).join(separator || '')));
 }
 
 /**
@@ -171,8 +174,7 @@ export function seq<T extends unknown[]>(args: MaybeRandomatorTuple<T>, opts = {
  */
 export function array<T>(arg: MaybeRandomator<T>, length: number): Randomator<T[]> {
   const arr = Array.from({ length }).fill(arg) as MaybeRandomator<T>[];
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  return tuple(arr) as any;
+  return tuple(arr);
 }
 
 /**

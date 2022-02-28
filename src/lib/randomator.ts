@@ -1,3 +1,4 @@
+import { from, pipeFromArray, unwrap } from './internal/index.js';
 import { filter, map, switchMap } from './operators/pipeable.js';
 import { MappingFunction } from './symbols.js';
 
@@ -7,22 +8,8 @@ import type { GenerateFunction, MaybeRandomator, Pipe } from './types.js';
  * Randomator class
  */
 export class Randomator<T = unknown> extends Function implements Iterator<T> {
-  static from<U>(x: U | Randomator<U> | GenerateFunction<U>): Randomator<U> {
-    if (x instanceof Randomator) {
-      return x;
-    }
-    if (typeof x === 'function') {
-      return new Randomator(x as GenerateFunction<U>);
-    }
-    return new Randomator(() => x);
-  }
-
-  static unwrap<U>(x: MaybeRandomator<U>): U {
-    while (x instanceof Randomator) {
-      x = x();
-    }
-    return x;
-  }
+  static from = from;
+  static unwrap = unwrap;
 
   static get [Symbol.species](): typeof Randomator {
     return this;
@@ -61,19 +48,13 @@ export class Randomator<T = unknown> extends Function implements Iterator<T> {
   /**
    * Returns a new Randomator based on the pipe
    *
-   * @param mapper
    * @returns
    */
-  pipe<U>(...fns: []): Randomator<U>;
-  pipe<U>(...fns: [...Pipe<T, unknown>[], Pipe<T, U>]): Randomator<U>;
-  pipe<U>(...fns: Array<Pipe<T, unknown>>): Randomator<U> {
-    if (fns.length === 0) {
-      return this as unknown as Randomator<U>;
-    }
-    if (fns.length === 1) {
-      return fns[0](this) as Randomator<U>;
-    }
-    return fns.reduce((acc, fn) => fn(acc) as unknown, this) as Randomator<U>;
+  pipe<U>(...ops: []): Randomator<U>;
+  pipe<U>(...ops: [...Pipe<T, unknown>[], Pipe<T, U>]): Randomator<U>;
+  pipe<U>(...ops: Pipe<T, unknown>[]): Randomator<U>;
+  pipe<U>(...ops: Array<Pipe<T, unknown>>): Randomator<U> {
+    return pipeFromArray(ops)(this) as Randomator<U>;
   }
 
   /**
@@ -117,7 +98,7 @@ export class Randomator<T = unknown> extends Function implements Iterator<T> {
     if (!mapping) {
       throw new Error('ap can only be called on a mapped Randomator');
     }
-    return Randomator.unwrap(mapping.call(this, value));
+    return unwrap(mapping.call(this, value));
   }
 
   /**
@@ -128,7 +109,7 @@ export class Randomator<T = unknown> extends Function implements Iterator<T> {
    */
   fold<U>(mapping?: (_: T) => MaybeRandomator<U>): U {
     const value = this();
-    return Randomator.unwrap(mapping ? mapping.call(this, value) : value);
+    return unwrap(mapping ? mapping.call(this, value) : value);
   }
 
   /**
